@@ -2,7 +2,25 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { ArrowLeft, FileText, Image, Upload, X, RefreshCw, Bold, Italic, Underline, Strikethrough, Code, Heading1, Heading2, Quote, List, ListOrdered, Minus } from "lucide-react";
+import {
+  ArrowLeft,
+  FileText,
+  Image,
+  Upload,
+  X,
+  RefreshCw,
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  Code,
+  Heading1,
+  Heading2,
+  Quote,
+  List,
+  ListOrdered,
+  Minus,
+} from "lucide-react";
 import { auth } from "@/lib/auth";
 import { toast } from "sonner";
 import { API_URL } from "@/lib/config";
@@ -121,8 +139,7 @@ function CmsNewPage() {
 
       const rect = layoutRef.current.getBoundingClientRect();
 
-      let percent =
-        ((e.clientX - rect.left) / rect.width) * 100;
+      let percent = ((e.clientX - rect.left) / rect.width) * 100;
 
       percent = Math.max(50, Math.min(85, percent));
 
@@ -151,10 +168,7 @@ function CmsNewPage() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(
-      "cms-editor-width",
-      editorWidth.toString()
-    );
+    localStorage.setItem("cms-editor-width", editorWidth.toString());
   }, [editorWidth]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -218,7 +232,7 @@ function CmsNewPage() {
           category,
           author: session?.name || "Lumen Editor",
           editor_id: session?.userId || "mock-editor-id",
-          attachments: attachments.map(a => ({ name: a.name, url: a.url }))
+          attachments: attachments.map((a) => ({ name: a.name, url: a.url })),
         }),
       });
 
@@ -268,15 +282,12 @@ function CmsNewPage() {
             Writer <span className="italic text-ember">Workspace.</span>
           </h1>
           <p className="mt-4 text-sm text-foreground/50 font-light leading-relaxed">
-            Compose your text, choose a category, and attach files or reference photos. Once submitted, Lumen's multi-AI-agent pipeline automatically summaries and embeds the text.
+            Compose your text, choose a category, and attach files or reference photos. Once
+            submitted, Lumen's multi-AI-agent pipeline automatically summaries and embeds the text.
           </p>
         </section>
 
-        <form
-          ref={layoutRef}
-          onSubmit={handleSubmit}
-          className="flex flex-col lg:flex-row gap-0"
-        >
+        <form ref={layoutRef} onSubmit={handleSubmit} className="flex flex-col lg:flex-row gap-0">
           {/* Main Content Area */}
           <div
             className="space-y-6"
@@ -315,7 +326,7 @@ function CmsNewPage() {
                     >
                       <tool.icon className="h-3.5 w-3.5" />
                     </button>
-                  )
+                  ),
                 )}
               </div>
 
@@ -365,9 +376,7 @@ function CmsNewPage() {
           </div>
 
           {/* Sidebar Area */}
-          <div
-            className="space-y-8 flex-1 min-w-[280px] pl-6"
-          >
+          <div className="space-y-8 flex-1 min-w-[280px] pl-6">
             {/* Category selection */}
             <div className="border border-line p-6 bg-card/10 rounded-lg space-y-4">
               <h3 className="text-xs uppercase tracking-[0.2em] text-ember font-semibold">

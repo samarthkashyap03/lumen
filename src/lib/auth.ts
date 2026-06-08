@@ -45,5 +45,5 @@ export const auth = {
   isReader(): boolean {
     const session = this.getSession();
     return session?.role === "reader";
-  }
+  },
 };

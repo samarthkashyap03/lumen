@@ -2,17 +2,17 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { 
-  Compass, 
-  Scissors, 
-  Cpu, 
-  CheckCircle, 
-  Sparkles, 
-  Layers, 
-  Database, 
+import {
+  Compass,
+  Scissors,
+  Cpu,
+  CheckCircle,
+  Sparkles,
+  Layers,
+  Database,
   Terminal,
   Server,
-  Workflow
+  Workflow,
 } from "lucide-react";
 
 // @ts-ignore
@@ -20,7 +20,10 @@ export const Route = createFileRoute("/tech-stack")({
   head: () => ({
     meta: [
       { title: "Tech Stack — Lumen" },
-      { name: "description", content: "Learn about the Multi-Agent AI architecture and technology stack behind Lumen." },
+      {
+        name: "description",
+        content: "Learn about the Multi-Agent AI architecture and technology stack behind Lumen.",
+      },
     ],
   }),
   component: TechStackPage,
@@ -117,7 +120,6 @@ function TechStackPage() {
       <Navbar />
 
       <main className="pt-32 pb-24 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto w-full relative z-10">
-        
         {/* Hero */}
         <section className="mb-24">
           <p className="text-ember font-medium tracking-[0.25em] uppercase text-xs mb-6 flex items-center gap-2">
@@ -127,7 +129,8 @@ function TechStackPage() {
             How Lumen works, <span className="italic text-ember">under the hood.</span>
           </h1>
           <p className="text-xl text-foreground/60 max-w-2xl font-light leading-relaxed">
-            Lumen uses a team of specialized AI agents working together to turn long articles into short, readable cards.
+            Lumen uses a team of specialized AI agents working together to turn long articles into
+            short, readable cards.
           </p>
         </section>
 
@@ -141,7 +144,9 @@ function TechStackPage() {
           </div>
 
           <p className="text-lg text-foreground/70 mb-12 max-w-3xl leading-relaxed font-light">
-            When an article is published, it goes through an automated assembly line. The three core <strong className="text-foreground font-semibold">AI-Agents</strong> handle the reading, writing, and editing, while the other steps handle the background technical work.
+            When an article is published, it goes through an automated assembly line. The three core{" "}
+            <strong className="text-foreground font-semibold">AI-Agents</strong> handle the reading,
+            writing, and editing, while the other steps handle the background technical work.
           </p>
 
           {/* Flowchart / Interactive list */}
@@ -169,11 +174,13 @@ function TechStackPage() {
                       <span className="text-[10px] uppercase font-mono tracking-wider bg-line/30 px-2 py-1 rounded text-foreground/50">
                         {agent.role}
                       </span>
-                      <span className={`text-[8px] uppercase tracking-widest px-1.5 py-0.5 rounded border ${
-                        isCoreAi 
-                          ? "bg-ember/15 border-ember/30 text-ember font-bold" 
-                          : "bg-line/20 border-line/45 text-foreground/40"
-                      }`}>
+                      <span
+                        className={`text-[8px] uppercase tracking-widest px-1.5 py-0.5 rounded border ${
+                          isCoreAi
+                            ? "bg-ember/15 border-ember/30 text-ember font-bold"
+                            : "bg-line/20 border-line/45 text-foreground/40"
+                        }`}
+                      >
                         {agent.type}
                       </span>
                     </div>
@@ -201,13 +208,14 @@ function TechStackPage() {
             {STACK_ITEMS.map((item, idx) => (
               <div key={item.title} className="border border-line bg-card/10 rounded-xl p-8">
                 <h3 className="font-serif text-2xl mb-4 text-foreground">{item.title}</h3>
-                <p className="text-xs font-mono text-ember uppercase tracking-wider mb-4">{item.tech}</p>
+                <p className="text-xs font-mono text-ember uppercase tracking-wider mb-4">
+                  {item.tech}
+                </p>
                 <p className="text-sm text-foreground/60 leading-relaxed font-light">{item.desc}</p>
               </div>
             ))}
           </div>
         </section>
-
       </main>
       <Footer />
     </div>

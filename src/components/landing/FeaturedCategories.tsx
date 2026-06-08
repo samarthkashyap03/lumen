@@ -39,7 +39,15 @@ export function FeaturedCategories() {
   }, []);
 
   // Build ordered list: known order, only show categories with images
-  const orderedNames = ["AI", "Technology", "Science", "Politics", "Startups", "Lifestyle", "General"];
+  const orderedNames = [
+    "AI",
+    "Technology",
+    "Science",
+    "Politics",
+    "Startups",
+    "Lifestyle",
+    "General",
+  ];
   const cats = orderedNames.map((name) => ({
     name,
     image: CAT_META[name].image,
@@ -51,7 +59,9 @@ export function FeaturedCategories() {
       <div className="mx-auto max-w-7xl">
         <div className="flex items-end justify-between gap-8 flex-wrap mb-16">
           <div className="max-w-2xl">
-            <p className="text-xs font-medium tracking-[0.25em] uppercase text-ember mb-6">Browse by topic</p>
+            <p className="text-xs font-medium tracking-[0.25em] uppercase text-ember mb-6">
+              Browse by topic
+            </p>
             <h2 className="font-serif text-5xl md:text-7xl leading-[0.95] text-foreground">
               Find stories about what <span className="italic">matters to you.</span>
             </h2>
@@ -72,9 +82,7 @@ export function FeaturedCategories() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: i * 0.05 }}
               className={`group relative overflow-hidden bg-ink ${
-                i === cats.length - 1
-                  ? "sm:col-span-2 lg:col-span-2 aspect-[8/5]"
-                  : "aspect-[4/5]"
+                i === cats.length - 1 ? "sm:col-span-2 lg:col-span-2 aspect-[8/5]" : "aspect-[4/5]"
               }`}
             >
               <img
@@ -89,7 +97,9 @@ export function FeaturedCategories() {
                   {loading ? (
                     <span className="inline-block w-8 h-2 bg-foreground/20 rounded animate-pulse" />
                   ) : (
-                    <>{c.count} {c.count === 1 ? "article" : "articles"}</>
+                    <>
+                      {c.count} {c.count === 1 ? "article" : "articles"}
+                    </>
                   )}
                 </div>
                 <div className="font-serif text-3xl text-foreground group-hover:italic group-hover:text-ember transition-all duration-300">

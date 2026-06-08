@@ -86,7 +86,9 @@ export function Navbar() {
                   key={l.to}
                   to={l.to as any}
                   className="text-xs uppercase tracking-[0.2em] text-foreground/60 hover:text-ember transition-colors"
-                  activeProps={{ className: "text-xs uppercase tracking-[0.2em] text-ember font-semibold" }}
+                  activeProps={{
+                    className: "text-xs uppercase tracking-[0.2em] text-ember font-semibold",
+                  }}
                   activeOptions={{ exact: true }}
                 >
                   {l.label}
@@ -178,7 +180,10 @@ export function Navbar() {
                     to={l.to as any}
                     onClick={handleNavClick}
                     className="block py-3 border-b border-line/40 text-sm uppercase tracking-[0.2em] text-foreground/60 hover:text-ember transition-colors"
-                    activeProps={{ className: "block py-3 border-b border-line/40 text-sm uppercase tracking-[0.2em] text-ember font-semibold" }}
+                    activeProps={{
+                      className:
+                        "block py-3 border-b border-line/40 text-sm uppercase tracking-[0.2em] text-ember font-semibold",
+                    }}
                     activeOptions={{ exact: true }}
                   >
                     {l.label}
@@ -192,7 +197,9 @@ export function Navbar() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-foreground/80 font-medium">{session.name}</p>
-                      <span className="text-[9px] uppercase tracking-[0.2em] text-ember">{session.role}</span>
+                      <span className="text-[9px] uppercase tracking-[0.2em] text-ember">
+                        {session.role}
+                      </span>
                     </div>
                     <button
                       onClick={handleSignOut}

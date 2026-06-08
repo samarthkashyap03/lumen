@@ -19,21 +19,24 @@ const CARDS: Card[] = [
     image: cardAi,
     category: "Attention",
     title: "Settle into the story.",
-    summary: "Lumen filters out the constant ping of notifications and fragmented news. Read curated articles in a calm, print-inspired layout designed to respect your focus.",
+    summary:
+      "Lumen filters out the constant ping of notifications and fragmented news. Read curated articles in a calm, print-inspired layout designed to respect your focus.",
   },
   {
     id: 2,
     image: cardCity,
     category: "Curation",
     title: "Human intent, not algorithms.",
-    summary: "Mindless feeds prioritize clicks and outrage. Lumen relies on editors who select content based on intellectual depth, giving you insights that actually matter.",
+    summary:
+      "Mindless feeds prioritize clicks and outrage. Lumen relies on editors who select content based on intellectual depth, giving you insights that actually matter.",
   },
   {
     id: 3,
     image: cardSpace,
     category: "Archiving",
     title: "Build your memory palace.",
-    summary: "Important insights shouldn't get lost in the scroll. Save key takeaways directly to your personal library, organized for lifetime discovery.",
+    summary:
+      "Important insights shouldn't get lost in the scroll. Save key takeaways directly to your personal library, organized for lifetime discovery.",
   },
 ];
 
@@ -53,14 +56,23 @@ export function SwipeCardPreview({ compact = false }: { compact?: boolean }) {
         {visible.map((card, i) => (
           <motion.div
             key={card.id}
-            initial={{ y: i === 0 ? 0 : 30 + i * 14, scale: 1 - i * 0.05, opacity: i === 2 ? 0 : 1 }}
+            initial={{
+              y: i === 0 ? 0 : 30 + i * 14,
+              scale: 1 - i * 0.05,
+              opacity: i === 2 ? 0 : 1,
+            }}
             animate={{
               y: i === 0 ? 0 : 30 + i * 14,
               scale: 1 - i * 0.05,
               opacity: i === 2 ? 0.4 : 1,
               zIndex: 10 - i,
             }}
-            exit={{ y: -400, opacity: 0, rotate: -4, transition: { duration: 0.55, ease: [0.4, 0, 0.2, 1] } }}
+            exit={{
+              y: -400,
+              opacity: 0,
+              rotate: -4,
+              transition: { duration: 0.55, ease: [0.4, 0, 0.2, 1] },
+            }}
             transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
             className="absolute inset-0 overflow-hidden bg-ink border border-line"
             style={{ zIndex: 10 - i, borderRadius: 20 }}
@@ -80,7 +92,9 @@ export function SwipeCardPreview({ compact = false }: { compact?: boolean }) {
             <div className="flex h-2/5 flex-col gap-2 p-4">
               <div className="h-px w-8 bg-ember mb-1" />
               <h3 className="font-serif text-base leading-tight text-foreground">{card.title}</h3>
-              <p className="text-[11px] leading-relaxed text-foreground/55 line-clamp-3">{card.summary}</p>
+              <p className="text-[11px] leading-relaxed text-foreground/55 line-clamp-3">
+                {card.summary}
+              </p>
               {i === 0 && (
                 <motion.div
                   className="mt-auto flex items-center justify-center gap-1.5 text-[9px] uppercase tracking-[0.25em] text-foreground/40"

@@ -30,15 +30,34 @@ export function Footer() {
 
           {/* Internal nav columns */}
           {[
-            { title: "Product", links: [["Features", "/features"], ["Feed", "/feed"], ["Chat", "/chat"]] },
-            { title: "Editorial", links: [["About", "/about"], ["Tech Stack", "/tech-stack"], ["Privacy", "/privacy"]] },
+            {
+              title: "Product",
+              links: [
+                ["Features", "/features"],
+                ["Feed", "/feed"],
+                ["Chat", "/chat"],
+              ],
+            },
+            {
+              title: "Editorial",
+              links: [
+                ["About", "/about"],
+                ["Tech Stack", "/tech-stack"],
+                ["Privacy", "/privacy"],
+              ],
+            },
           ].map((col) => (
             <div key={col.title}>
-              <div className="text-[10px] uppercase tracking-[0.3em] text-ember mb-5">{col.title}</div>
+              <div className="text-[10px] uppercase tracking-[0.3em] text-ember mb-5">
+                {col.title}
+              </div>
               <ul className="space-y-3">
                 {col.links.map(([label, href]) => (
                   <li key={label}>
-                    <Link to={href as any} className="text-sm text-foreground/65 hover:text-foreground transition-colors">
+                    <Link
+                      to={href as any}
+                      className="text-sm text-foreground/65 hover:text-foreground transition-colors"
+                    >
                       {label}
                     </Link>
                   </li>
@@ -54,7 +73,6 @@ export function Footer() {
               {[
                 { label: "GitHub", href: "https://github.com/samarthkashyap03" },
                 { label: "LinkedIn", href: "https://www.linkedin.com/in/samarthkashyap/" },
-
               ].map(({ label, href }) => (
                 <li key={label}>
                   <a

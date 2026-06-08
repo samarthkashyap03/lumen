@@ -53,9 +53,9 @@ function Register() {
 
       const data = await response.json();
       auth.setSession(data.session_token, data.user_id, data.name, data.role);
-      
+
       toast.success(`Welcome to Lumen, ${data.name}! Account created.`);
-      
+
       if (data.role === "editor") {
         navigate({ to: "/cms" });
       } else {
@@ -117,7 +117,10 @@ function Register() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-[10px] uppercase tracking-[0.25em] text-foreground/60">
+              <Label
+                htmlFor="name"
+                className="text-[10px] uppercase tracking-[0.25em] text-foreground/60"
+              >
                 Name
               </Label>
               <Input
@@ -131,7 +134,10 @@ function Register() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-[10px] uppercase tracking-[0.25em] text-foreground/60">
+              <Label
+                htmlFor="email"
+                className="text-[10px] uppercase tracking-[0.25em] text-foreground/60"
+              >
                 Email
               </Label>
               <Input
@@ -146,7 +152,10 @@ function Register() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-[10px] uppercase tracking-[0.25em] text-foreground/60">
+              <Label
+                htmlFor="password"
+                className="text-[10px] uppercase tracking-[0.25em] text-foreground/60"
+              >
                 Password
               </Label>
               <Input

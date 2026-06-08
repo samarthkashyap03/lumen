@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600&display=swap");
-@import "tailwindcss" source(none);
+@import "tailwindcss";
 @import "tw-animate-css";
 @source "../src";
 
@@ -43,16 +42,16 @@
   --radius: 0.5rem;
 
   /* Charcoal & Ember — warm editorial dark */
-  --ink: oklch(0.16 0.005 60);          /* #0e0d0c bg */
-  --paper: oklch(0.96 0.012 85);        /* #f5f1e8 type */
-  --ember: oklch(0.66 0.18 38);         /* #e85d3a accent */
-  --line: oklch(0.27 0.008 50);         /* #2d2826 hairline */
+  --ink: oklch(0.16 0.005 60); /* #0e0d0c bg */
+  --paper: oklch(0.96 0.012 85); /* #f5f1e8 type */
+  --ember: oklch(0.66 0.18 38); /* #e85d3a accent */
+  --line: oklch(0.27 0.008 50); /* #2d2826 hairline */
 
   --background: var(--ink);
   --foreground: var(--paper);
-  --card: oklch(0.20 0.006 55);         /* #1a1816 */
+  --card: oklch(0.2 0.006 55); /* #1a1816 */
   --card-foreground: var(--paper);
-  --popover: oklch(0.20 0.006 55);
+  --popover: oklch(0.2 0.006 55);
   --popover-foreground: var(--paper);
   --primary: var(--ember);
   --primary-foreground: var(--ink);
@@ -72,9 +71,9 @@
 .dark {
   --background: var(--ink);
   --foreground: var(--paper);
-  --card: oklch(0.20 0.006 55);
+  --card: oklch(0.2 0.006 55);
   --card-foreground: var(--paper);
-  --popover: oklch(0.20 0.006 55);
+  --popover: oklch(0.2 0.006 55);
   --popover-foreground: var(--paper);
   --primary: var(--ember);
   --primary-foreground: var(--ink);

@@ -83,8 +83,8 @@ function ReaderPage() {
             author: "Elena Rostova",
             category: "AI",
             body_text: "Artificial intelligence has undergone a fundamental architectural shift...",
-            published_at: new Date().toISOString()
-          }
+            published_at: new Date().toISOString(),
+          },
         ]);
       });
   }, [articleId]);
@@ -93,7 +93,7 @@ function ReaderPage() {
   useEffect(() => {
     setLoading(true);
     setIsTakingLong(false);
-    
+
     const timer = setTimeout(() => {
       setIsTakingLong(true);
     }, 4500);
@@ -103,7 +103,8 @@ function ReaderPage() {
       title: "Neural models now reason in real time.",
       author: "Elena Rostova",
       category: "AI",
-      body_text: "Artificial intelligence has undergone a fundamental architectural shift. By introducing compressed semantic trees, next-generation reasoning networks are capable of generating complete multi-step logical layouts within milliseconds.\n\nThis represents a massive departure from typical autoregressive prompt queries. Traditional large language models generate tokens step-by-step in sequence, inducing high computing latency. Real-time models pre-evaluate potential pathways in parallel clusters, caching token hierarchies before output execution starts.\n\nThe practical applications are immediate. Interactive voice interfaces feel conversational rather than rigid, adjusting emphasis dynamically to coordinate with human speech beats. Researchers anticipate this level of throughput will redefine consumer agents in the coming year, shifting focus from pure computational parameters to sensory latency boundaries.",
+      body_text:
+        "Artificial intelligence has undergone a fundamental architectural shift. By introducing compressed semantic trees, next-generation reasoning networks are capable of generating complete multi-step logical layouts within milliseconds.\n\nThis represents a massive departure from typical autoregressive prompt queries. Traditional large language models generate tokens step-by-step in sequence, inducing high computing latency. Real-time models pre-evaluate potential pathways in parallel clusters, caching token hierarchies before output execution starts.\n\nThe practical applications are immediate. Interactive voice interfaces feel conversational rather than rigid, adjusting emphasis dynamically to coordinate with human speech beats. Researchers anticipate this level of throughput will redefine consumer agents in the coming year, shifting focus from pure computational parameters to sensory latency boundaries.",
       published_at: new Date().toISOString(),
       cards: [
         {
@@ -111,26 +112,29 @@ function ReaderPage() {
           card_index: 0,
           category: "AI",
           title: "Neural models reason in *real time*",
-          summary: "A new reasoning architecture compresses critical semantic trees into milliseconds. Assistants can pre-plan answers in parallel prior to typing outputs.",
-          image_url: "ai"
+          summary:
+            "A new reasoning architecture compresses critical semantic trees into milliseconds. Assistants can pre-plan answers in parallel prior to typing outputs.",
+          image_url: "ai",
         },
         {
           id: "c2",
           card_index: 1,
           category: "AI",
           title: "Shifting away from *autoregression*",
-          summary: "Traditional sequential processing induces high latency boundaries. Parallel computing tracks cache entire hierarchies, allowing immediate response rates.",
-          image_url: "space"
+          summary:
+            "Traditional sequential processing induces high latency boundaries. Parallel computing tracks cache entire hierarchies, allowing immediate response rates.",
+          image_url: "space",
         },
         {
           id: "c3",
           card_index: 2,
           category: "AI",
           title: "Redefining user *interaction*",
-          summary: "Practical consumer voice loops adapt to real conversation dynamics. Focus moves from raw cluster size to absolute sensory response speeds.",
-          image_url: "city"
-        }
-      ]
+          summary:
+            "Practical consumer voice loops adapt to real conversation dynamics. Focus moves from raw cluster size to absolute sensory response speeds.",
+          image_url: "city",
+        },
+      ],
     };
 
     fetch(`${API_URL}/api/articles/${articleId}`)
@@ -160,7 +164,8 @@ function ReaderPage() {
       title: "Neural models now reason in real time.",
       author: "Elena Rostova",
       category: "AI",
-      body_text: "Artificial intelligence has undergone a fundamental architectural shift. By introducing compressed semantic trees, next-generation reasoning networks are capable of generating complete multi-step logical layouts within milliseconds.\n\nThis represents a massive departure from typical autoregressive prompt queries. Traditional large language models generate tokens step-by-step in sequence, inducing high computing latency. Real-time models pre-evaluate potential pathways in parallel clusters, caching token hierarchies before output execution starts.\n\nThe practical applications are immediate. Interactive voice interfaces feel conversational rather than rigid, adjusting emphasis dynamically to coordinate with human speech beats. Researchers anticipate this level of throughput will redefine consumer agents in the coming year, shifting focus from pure computational parameters to sensory latency boundaries.",
+      body_text:
+        "Artificial intelligence has undergone a fundamental architectural shift. By introducing compressed semantic trees, next-generation reasoning networks are capable of generating complete multi-step logical layouts within milliseconds.\n\nThis represents a massive departure from typical autoregressive prompt queries. Traditional large language models generate tokens step-by-step in sequence, inducing high computing latency. Real-time models pre-evaluate potential pathways in parallel clusters, caching token hierarchies before output execution starts.\n\nThe practical applications are immediate. Interactive voice interfaces feel conversational rather than rigid, adjusting emphasis dynamically to coordinate with human speech beats. Researchers anticipate this level of throughput will redefine consumer agents in the coming year, shifting focus from pure computational parameters to sensory latency boundaries.",
       published_at: new Date().toISOString(),
       cards: [
         {
@@ -168,26 +173,29 @@ function ReaderPage() {
           card_index: 0,
           category: "AI",
           title: "Neural models reason in *real time*",
-          summary: "A new reasoning architecture compresses critical semantic trees into milliseconds. Assistants can pre-plan answers in parallel prior to typing outputs.",
-          image_url: "ai"
+          summary:
+            "A new reasoning architecture compresses critical semantic trees into milliseconds. Assistants can pre-plan answers in parallel prior to typing outputs.",
+          image_url: "ai",
         },
         {
           id: "c2",
           card_index: 1,
           category: "AI",
           title: "Shifting away from *autoregression*",
-          summary: "Traditional sequential processing induces high latency boundaries. Parallel computing tracks cache entire hierarchies, allowing immediate response rates.",
-          image_url: "space"
+          summary:
+            "Traditional sequential processing induces high latency boundaries. Parallel computing tracks cache entire hierarchies, allowing immediate response rates.",
+          image_url: "space",
         },
         {
           id: "c3",
           card_index: 2,
           category: "AI",
           title: "Redefining user *interaction*",
-          summary: "Practical consumer voice loops adapt to real conversation dynamics. Focus moves from raw cluster size to absolute sensory response speeds.",
-          image_url: "city"
-        }
-      ]
+          summary:
+            "Practical consumer voice loops adapt to real conversation dynamics. Focus moves from raw cluster size to absolute sensory response speeds.",
+          image_url: "city",
+        },
+      ],
     };
     setArticle(fallbackArticle);
     setActiveCardIdx(0);
@@ -208,7 +216,8 @@ function ReaderPage() {
   // Find next/prev article IDs
   const currentIdx = articles.findIndex((art) => art.id === articleId);
   const prevArticleId = currentIdx > 0 ? articles[currentIdx - 1].id : null;
-  const nextArticleId = currentIdx < articles.length - 1 && currentIdx !== -1 ? articles[currentIdx + 1].id : null;
+  const nextArticleId =
+    currentIdx < articles.length - 1 && currentIdx !== -1 ? articles[currentIdx + 1].id : null;
 
   const handleNextCard = () => {
     if (article?.cards && activeCardIdx < article.cards.length - 1) {
@@ -276,7 +285,7 @@ function ReaderPage() {
             <p className="text-[10px] uppercase tracking-[0.15em] text-foreground/30 max-w-xs">
               Backend might be waking up from a cold start, or connection is slow.
             </p>
-            <button 
+            <button
               onClick={loadMockPreview}
               className="px-6 py-3 border border-line text-[10px] uppercase tracking-[0.2em] hover:bg-card hover:border-ember/40 transition-colors text-foreground/70 hover:text-foreground"
             >
@@ -319,7 +328,11 @@ function ReaderPage() {
             </h1>
             <div className="mt-8 flex justify-between items-center text-xs text-foreground/30">
               <span>By {article.author}</span>
-              <span>{new Date(article.published_at).toLocaleDateString("en-US", { dateStyle: "medium" })}</span>
+              <span>
+                {new Date(article.published_at).toLocaleDateString("en-US", {
+                  dateStyle: "medium",
+                })}
+              </span>
             </div>
           </section>
 
@@ -333,7 +346,8 @@ function ReaderPage() {
               Unlock this story and the <span className="text-ember">entire archive.</span>
             </h3>
             <p className="text-sm md:text-base text-foreground/50 leading-relaxed font-light">
-              You've reached the limit of free dispatches. Sign up or log in to read the full article, swipe the summary cards, and ask the AI feed target questions.
+              You've reached the limit of free dispatches. Sign up or log in to read the full
+              article, swipe the summary cards, and ask the AI feed target questions.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
               <Link
@@ -354,7 +368,6 @@ function ReaderPage() {
         </main>
       ) : (
         <main className="flex-1 pt-32 pb-24 px-6 md:px-12 lg:px-20 max-w-[1440px] mx-auto w-full relative z-10">
-          
           {/* Nav and shortcuts guide */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-12">
             <Link
@@ -363,7 +376,7 @@ function ReaderPage() {
             >
               <ArrowLeft className="h-3 w-3" /> Back to Feed
             </Link>
-            
+
             <div className="hidden lg:flex items-center gap-6 text-[9px] uppercase tracking-[0.15em] text-foreground/40 font-light">
               <span className="flex items-center gap-1.5 border border-line px-2 py-1 bg-ink/40">
                 <Keyboard className="h-3.5 w-3.5" /> Arrow Keys Enabled
@@ -405,7 +418,9 @@ function ReaderPage() {
                   <button
                     onClick={() => setShowOriginal(false)}
                     className={`relative px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] rounded-full transition-all duration-300 cursor-pointer ${
-                      !showOriginal ? "text-ink bg-ember" : "text-foreground/50 hover:text-foreground bg-transparent"
+                      !showOriginal
+                        ? "text-ink bg-ember"
+                        : "text-foreground/50 hover:text-foreground bg-transparent"
                     }`}
                   >
                     AI Digest Cards
@@ -416,7 +431,9 @@ function ReaderPage() {
                       if (!showOriginal) trackEvent("read", articleId);
                     }}
                     className={`relative px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] rounded-full transition-all duration-300 cursor-pointer ${
-                      showOriginal ? "text-ink bg-ember" : "text-foreground/50 hover:text-foreground bg-transparent"
+                      showOriginal
+                        ? "text-ink bg-ember"
+                        : "text-foreground/50 hover:text-foreground bg-transparent"
                     }`}
                   >
                     Original Article
@@ -426,7 +443,11 @@ function ReaderPage() {
 
               <div className="mt-10 flex justify-between items-center text-xs text-foreground/50">
                 <span>By {article.author}</span>
-                <span>{new Date(article.published_at).toLocaleDateString("en-US", { dateStyle: "medium" })}</span>
+                <span>
+                  {new Date(article.published_at).toLocaleDateString("en-US", {
+                    dateStyle: "medium",
+                  })}
+                </span>
               </div>
             </section>
 
@@ -436,7 +457,9 @@ function ReaderPage() {
               <div className="max-w-lg mx-auto w-full select-none">
                 <div className="bg-card/10 border border-line p-8 rounded-lg">
                   <div className="flex justify-between items-center border-b border-line pb-4 mb-8">
-                    <span className="text-[10px] uppercase tracking-[0.3em] text-ember font-semibold">Lumen dispatches</span>
+                    <span className="text-[10px] uppercase tracking-[0.3em] text-ember font-semibold">
+                      Lumen dispatches
+                    </span>
                     <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/45">
                       {activeCardIdx + 1} of {cards.length}
                     </span>
@@ -478,16 +501,32 @@ function ReaderPage() {
                               {activeCard.category}
                             </div>
                           </div>
-                          
+
                           {/* Content Bottom Half */}
                           <div className="p-6 flex flex-col justify-between h-1/2 bg-ink">
                             <div>
                               <div className="h-px w-8 bg-ember mb-3" />
                               <h3 className="font-serif text-lg leading-tight text-foreground mb-3">
-                                {activeCard.title.split("*").map((t, idx) => idx % 2 !== 0 ? <em key={idx} className="italic text-ember font-normal">{t}</em> : t)}
+                                {activeCard.title.split("*").map((t, idx) =>
+                                  idx % 2 !== 0 ? (
+                                    <em key={idx} className="italic text-ember font-normal">
+                                      {t}
+                                    </em>
+                                  ) : (
+                                    t
+                                  ),
+                                )}
                               </h3>
                               <p className="text-[11px] leading-relaxed text-foreground/60 font-light">
-                                {activeCard.summary.split("*").map((t, idx) => idx % 2 !== 0 ? <em key={idx} className="italic text-ember font-normal">{t}</em> : t)}
+                                {activeCard.summary.split("*").map((t, idx) =>
+                                  idx % 2 !== 0 ? (
+                                    <em key={idx} className="italic text-ember font-normal">
+                                      {t}
+                                    </em>
+                                  ) : (
+                                    t
+                                  ),
+                                )}
                               </p>
                             </div>
                           </div>
@@ -505,7 +544,7 @@ function ReaderPage() {
                     >
                       <ChevronLeft className="h-4 w-4" />
                     </button>
-                    
+
                     <div className="flex gap-1.5">
                       {cards.map((_, idx) => (
                         <button
@@ -551,7 +590,12 @@ function ReaderPage() {
                         return text.split("*").map((subText, j) => {
                           const isItalic = j % 2 !== 0;
                           if (isBold) return <strong key={`${i}-${j}`}>{subText}</strong>;
-                          if (isItalic) return <em key={`${i}-${j}`} className="italic text-ember">{subText}</em>;
+                          if (isItalic)
+                            return (
+                              <em key={`${i}-${j}`} className="italic text-ember">
+                                {subText}
+                              </em>
+                            );
                           return subText;
                         });
                       })}

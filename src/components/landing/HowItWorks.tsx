@@ -6,9 +6,9 @@ const STEPS = [
     title: "Editors publish the story",
     body: (
       <>
-        Editors write and submit full-length articles through Lumen's dashboard. No
-        social media noise, no engagement bait —{" "}
-        <span className="italic text-ember">just real journalism</span>, written to inform.
+        Editors write and submit full-length articles through Lumen's dashboard. No social media
+        noise, no engagement bait — <span className="italic text-ember">just real journalism</span>,
+        written to inform.
       </>
     ),
     note: "* Any editor can submit. Every article goes through Lumen before it reaches readers.",
@@ -31,9 +31,9 @@ const STEPS = [
     title: "You read it your way",
     body: (
       <>
-        Swipe through the short summary cards in under 90 seconds. If a story grabs you,
-        tap through to read the{" "}
-        <span className="italic">full article</span> at any time. Speed or depth — you decide.
+        Swipe through the short summary cards in under 90 seconds. If a story grabs you, tap through
+        to read the <span className="italic">full article</span> at any time. Speed or depth — you
+        decide.
       </>
     ),
   },
@@ -41,7 +41,10 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="relative px-6 md:px-12 lg:px-20 py-32 border-t border-line">
+    <section
+      id="how-it-works"
+      className="relative px-6 md:px-12 lg:px-20 py-32 border-t border-line"
+    >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         <div className="lg:col-span-4">
           <h2 className="text-xs uppercase tracking-[0.25em] text-ember font-medium lg:sticky lg:top-32">
@@ -68,7 +71,9 @@ export function HowItWorks() {
               <div className="lg:pl-32 max-w-2xl">
                 <p className="text-lg md:text-xl leading-relaxed text-foreground/70">{s.body}</p>
                 {s.note && (
-                  <p className="mt-6 text-sm text-foreground/40 font-light italic leading-loose">{s.note}</p>
+                  <p className="mt-6 text-sm text-foreground/40 font-light italic leading-loose">
+                    {s.note}
+                  </p>
                 )}
               </div>
             </motion.div>

@@ -50,34 +50,52 @@ const MOCK_ARTICLES: Article[] = [
     title: "Neural models now reason in real time.",
     author: "Elena Rostova",
     category: "AI",
-    body_text: "A new architecture compresses thought into milliseconds — assistants that respond before you finish your sentence...",
+    body_text:
+      "A new architecture compresses thought into milliseconds — assistants that respond before you finish your sentence...",
     published_at: new Date().toISOString(),
     cards: [
-      { id: "c1", category: "AI", title: "Real-time *Inference*", summary: "A new architecture compresses semantic thought into milliseconds." }
-    ]
+      {
+        id: "c1",
+        category: "AI",
+        title: "Real-time *Inference*",
+        summary: "A new architecture compresses semantic thought into milliseconds.",
+      },
+    ],
   },
   {
     id: "2",
     title: "Tokyo unveils carbon-neutral district.",
     author: "Kaito Sato",
     category: "Cities",
-    body_text: "Smart grids, vertical forests, and AI traffic flow cut emissions by 84% in a single year...",
+    body_text:
+      "Smart grids, vertical forests, and AI traffic flow cut emissions by 84% in a single year...",
     published_at: new Date().toISOString(),
     cards: [
-      { id: "c2", category: "Cities", title: "Smart *Grids*", summary: "Smart grids and vertical forests cut carbon emissions by 84." }
-    ]
+      {
+        id: "c2",
+        category: "Cities",
+        title: "Smart *Grids*",
+        summary: "Smart grids and vertical forests cut carbon emissions by 84.",
+      },
+    ],
   },
   {
     id: "3",
     title: "JWST captures the youngest galaxy ever observed.",
     author: "Dr. Marcus Vance",
     category: "Science",
-    body_text: "Light from 290 million years after the Big Bang reveals how stars forged elements...",
+    body_text:
+      "Light from 290 million years after the Big Bang reveals how stars forged elements...",
     published_at: new Date().toISOString(),
     cards: [
-      { id: "c3", category: "Science", title: "JWST *Galaxy*", summary: "Galaxies formed 290 million years after the big bang detected." }
-    ]
-  }
+      {
+        id: "c3",
+        category: "Science",
+        title: "JWST *Galaxy*",
+        summary: "Galaxies formed 290 million years after the big bang detected.",
+      },
+    ],
+  },
 ];
 
 function FeedPage() {
@@ -108,7 +126,8 @@ function FeedPage() {
   // Filter based on category and search query
   const filteredArticles = articles.filter((art) => {
     const matchesCategory = !category || art.category.toLowerCase() === category.toLowerCase();
-    const matchesSearch = !searchQuery.trim() || 
+    const matchesSearch =
+      !searchQuery.trim() ||
       art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       art.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
       art.category.toLowerCase().includes(searchQuery.toLowerCase());
@@ -156,8 +175,18 @@ function FeedPage() {
         {/* Topic Pill Selector */}
         <section className="px-6 md:px-12 lg:px-20 pt-6 max-w-7xl mx-auto w-full select-none">
           <div className="flex flex-wrap gap-2.5 items-center">
-            {["All", "AI", "Technology", "Science", "Politics", "Startups", "Lifestyle", "General"].map((cat) => {
-              const isActive = (!category && cat === "All") || (category?.toLowerCase() === cat.toLowerCase());
+            {[
+              "All",
+              "AI",
+              "Technology",
+              "Science",
+              "Politics",
+              "Startups",
+              "Lifestyle",
+              "General",
+            ].map((cat) => {
+              const isActive =
+                (!category && cat === "All") || category?.toLowerCase() === cat.toLowerCase();
               return (
                 <Link
                   key={cat}
@@ -185,7 +214,22 @@ function FeedPage() {
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-ember"></span>
               </span>
               <p className="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-foreground/75 font-medium leading-normal">
-                Viewing 3 free dispatches. <Link to="/login" className="text-ember underline underline-offset-2 font-semibold hover:text-paper transition-colors">Sign in</Link> or <Link to="/register" search={{ role: "reader" }} className="text-ember underline underline-offset-2 font-semibold hover:text-paper transition-colors">create an account</Link> to view all.
+                Viewing 3 free dispatches.{" "}
+                <Link
+                  to="/login"
+                  className="text-ember underline underline-offset-2 font-semibold hover:text-paper transition-colors"
+                >
+                  Sign in
+                </Link>{" "}
+                or{" "}
+                <Link
+                  to="/register"
+                  search={{ role: "reader" }}
+                  className="text-ember underline underline-offset-2 font-semibold hover:text-paper transition-colors"
+                >
+                  create an account
+                </Link>{" "}
+                to view all.
               </p>
             </div>
           </section>
@@ -195,18 +239,23 @@ function FeedPage() {
         <section className="px-6 md:px-12 lg:px-20 pt-10 pb-20 max-w-7xl mx-auto">
           {loading ? (
             <div className="flex justify-center items-center py-20">
-              <span className="text-xs uppercase tracking-[0.2em] text-foreground/40 font-serif italic animate-pulse">Loading the spread...</span>
+              <span className="text-xs uppercase tracking-[0.2em] text-foreground/40 font-serif italic animate-pulse">
+                Loading the spread...
+              </span>
             </div>
           ) : filteredArticles.length === 0 ? (
             <div className="py-20 text-center select-none">
-              <span className="text-xs uppercase tracking-[0.2em] text-foreground/45 font-serif italic">No matching dispatches found.</span>
+              <span className="text-xs uppercase tracking-[0.2em] text-foreground/45 font-serif italic">
+                No matching dispatches found.
+              </span>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-12 gap-y-20 gap-x-12">
               {visibleArticles.map((article, idx) => {
                 // Alternating wide layout sizes for editorial rhythm
-                const gridSpan = idx % 3 === 0 ? "md:col-span-12 lg:col-span-8" : "md:col-span-6 lg:col-span-4";
-                
+                const gridSpan =
+                  idx % 3 === 0 ? "md:col-span-12 lg:col-span-8" : "md:col-span-6 lg:col-span-4";
+
                 return (
                   <motion.div
                     key={article.id}
@@ -218,16 +267,21 @@ function FeedPage() {
                   >
                     <div>
                       <div className="flex justify-between items-center border-b border-line pb-4 mb-6">
-                        <span className="text-xs uppercase tracking-[0.2em] text-ember font-medium">{article.category}</span>
+                        <span className="text-xs uppercase tracking-[0.2em] text-ember font-medium">
+                          {article.category}
+                        </span>
                         <span className="text-[10px] uppercase tracking-[0.2em] text-foreground/40">
-                          {new Date(article.published_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                          {new Date(article.published_at).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                          })}
                         </span>
                       </div>
 
                       <h3 className="font-serif text-3xl md:text-4xl text-foreground group-hover:text-ember transition-colors duration-300 mb-6">
                         {article.title}
                       </h3>
-                      
+
                       <p className="text-sm md:text-base text-foreground/60 leading-relaxed font-light line-clamp-3 mb-8">
                         {article.body_text}
                       </p>
@@ -235,7 +289,7 @@ function FeedPage() {
 
                     <div className="flex flex-wrap gap-4 items-center justify-between border-t border-line/60 pt-6 mt-auto">
                       <span className="text-xs text-foreground/40 italic">By {article.author}</span>
-                      
+
                       <div className="flex gap-4">
                         <Link
                           to="/reader/$articleId"
@@ -270,7 +324,9 @@ function FeedPage() {
                     Unlock the entire daily <span className="text-ember">spread.</span>
                   </h3>
                   <p className="text-sm md:text-base text-foreground/50 max-w-xl mx-auto leading-relaxed font-light">
-                    Lumen features a curated selection of journalism. To search beyond the first three dispatches, access RAG feed chat, or view complete logs, join our reading sanctuary.
+                    Lumen features a curated selection of journalism. To search beyond the first
+                    three dispatches, access RAG feed chat, or view complete logs, join our reading
+                    sanctuary.
                   </p>
                   <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
                     <Link

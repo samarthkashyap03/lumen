@@ -2,7 +2,23 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { ArrowLeft, Save, RefreshCw, Trash2, Bold, Italic, Underline, Strikethrough, Code, Heading1, Heading2, Quote, List, ListOrdered, Minus } from "lucide-react";
+import {
+  ArrowLeft,
+  Save,
+  RefreshCw,
+  Trash2,
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  Code,
+  Heading1,
+  Heading2,
+  Quote,
+  List,
+  ListOrdered,
+  Minus,
+} from "lucide-react";
 import { auth } from "@/lib/auth";
 import { toast } from "sonner";
 import { API_URL } from "@/lib/config";
@@ -76,19 +92,19 @@ function CmsEditPage() {
   };
 
   const TOOLBAR_TOOLS = [
-    { icon: Bold,          label: "Bold",           action: () => applyFormat("**", "**") },
-    { icon: Italic,        label: "Italic",         action: () => applyFormat("*", "*") },
-    { icon: Underline,     label: "Underline",      action: () => applyFormat("<u>", "</u>") },
-    { icon: Strikethrough, label: "Strikethrough",  action: () => applyFormat("~~", "~~") },
-    { icon: Code,          label: "Inline code",    action: () => applyFormat("`", "`") },
+    { icon: Bold, label: "Bold", action: () => applyFormat("**", "**") },
+    { icon: Italic, label: "Italic", action: () => applyFormat("*", "*") },
+    { icon: Underline, label: "Underline", action: () => applyFormat("<u>", "</u>") },
+    { icon: Strikethrough, label: "Strikethrough", action: () => applyFormat("~~", "~~") },
+    { icon: Code, label: "Inline code", action: () => applyFormat("`", "`") },
     null,
-    { icon: Heading1,      label: "Heading 1",      action: () => applyFormat("# ", "", true) },
-    { icon: Heading2,      label: "Heading 2",      action: () => applyFormat("## ", "", true) },
-    { icon: Quote,         label: "Blockquote",     action: () => applyFormat("> ", "", true) },
+    { icon: Heading1, label: "Heading 1", action: () => applyFormat("# ", "", true) },
+    { icon: Heading2, label: "Heading 2", action: () => applyFormat("## ", "", true) },
+    { icon: Quote, label: "Blockquote", action: () => applyFormat("> ", "", true) },
     null,
-    { icon: List,          label: "Bullet list",    action: () => applyFormat("- ", "", true) },
-    { icon: ListOrdered,   label: "Numbered list",  action: () => applyFormat("1. ", "", true) },
-    { icon: Minus,         label: "Divider",        action: () => insertAtCursor("\n---\n") },
+    { icon: List, label: "Bullet list", action: () => applyFormat("- ", "", true) },
+    { icon: ListOrdered, label: "Numbered list", action: () => applyFormat("1. ", "", true) },
+    { icon: Minus, label: "Divider", action: () => insertAtCursor("\n---\n") },
   ] as const;
 
   // Guard route on mount
@@ -142,7 +158,7 @@ function CmsEditPage() {
           body_text: bodyText,
           category,
           author: session?.name || "Lumen Editor",
-          editor_id: session?.userId || "mock-editor-id"
+          editor_id: session?.userId || "mock-editor-id",
         }),
       });
 
@@ -184,14 +200,17 @@ function CmsEditPage() {
             Writer <span className="italic text-ember">Desk.</span>
           </h1>
           <p className="mt-4 text-sm text-foreground/50 font-light leading-relaxed">
-            Modify title, category, or body content. Saving changes updates the RAG database index immediately and prompts the Multi-AI pipeline to re-compile the cards.
+            Modify title, category, or body content. Saving changes updates the RAG database index
+            immediately and prompts the Multi-AI pipeline to re-compile the cards.
           </p>
         </section>
 
         {loadingArticle ? (
           <div className="py-20 text-center">
             <RefreshCw className="h-6 w-6 text-ember animate-spin mx-auto mb-4" />
-            <span className="text-xs uppercase tracking-[0.2em] text-foreground/45 font-serif italic animate-pulse">Loading dispatch draft...</span>
+            <span className="text-xs uppercase tracking-[0.2em] text-foreground/45 font-serif italic animate-pulse">
+              Loading dispatch draft...
+            </span>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -228,7 +247,7 @@ function CmsEditPage() {
                       >
                         <tool.icon className="h-3.5 w-3.5" />
                       </button>
-                    )
+                    ),
                   )}
                 </div>
 
@@ -246,7 +265,8 @@ function CmsEditPage() {
 
                 {/* Word / char count */}
                 <div className="px-4 py-2 border-t border-line/60 text-right text-[10px] text-foreground/30 font-light">
-                  {bodyText.split(/\s+/).filter(Boolean).length} words · {bodyText.length} characters
+                  {bodyText.split(/\s+/).filter(Boolean).length} words · {bodyText.length}{" "}
+                  characters
                 </div>
               </div>
             </div>
@@ -293,7 +313,7 @@ function CmsEditPage() {
                   </>
                 )}
               </button>
-              
+
               <Link
                 to="/cms/work"
                 className="w-full py-3.5 border border-line hover:border-foreground/30 text-foreground/60 hover:text-foreground text-xs tracking-[0.2em] uppercase font-medium transition-all flex items-center justify-center"

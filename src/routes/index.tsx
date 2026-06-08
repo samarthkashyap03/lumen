@@ -12,9 +12,16 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Lumen — Journalism, recomposed." },
-      { name: "description", content: "An editorial reading sanctuary. AI distills the noise so you can settle into the story. Designed for depth, built for the curious." },
+      {
+        name: "description",
+        content:
+          "An editorial reading sanctuary. AI distills the noise so you can settle into the story. Designed for depth, built for the curious.",
+      },
       { property: "og:title", content: "Lumen — Journalism, recomposed." },
-      { property: "og:description", content: "An editorial reading sanctuary for the curious mind." },
+      {
+        property: "og:description",
+        content: "An editorial reading sanctuary for the curious mind.",
+      },
       { property: "og:type", content: "website" },
     ],
   }),

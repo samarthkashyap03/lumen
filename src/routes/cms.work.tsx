@@ -2,11 +2,32 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { Eye, Edit3, Trash2, Calendar, FileText, Search, Plus, AlertCircle, RefreshCw, Share2, Check } from "lucide-react";
+import {
+  Eye,
+  Edit3,
+  Trash2,
+  Calendar,
+  FileText,
+  Search,
+  Plus,
+  AlertCircle,
+  RefreshCw,
+  Share2,
+  Check,
+} from "lucide-react";
 import { auth } from "@/lib/auth";
 import { toast } from "sonner";
 import { API_URL } from "@/lib/config";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/cms/work")({
   head: () => ({
@@ -148,7 +169,7 @@ function CmsWorkPage() {
   const filteredArticles = articles.filter(
     (art) =>
       art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      art.category.toLowerCase().includes(searchQuery.toLowerCase())
+      art.category.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // Group items by headers
@@ -181,7 +202,8 @@ function CmsWorkPage() {
               My <span className="italic text-ember">Work.</span>
             </h1>
             <p className="mt-4 text-sm text-foreground/50 max-w-xl font-light leading-relaxed">
-              Manage your composed dispatches and external ingestion links. You can edit the text to re-trigger the Multi-AI publishing pipeline or view the reader results.
+              Manage your composed dispatches and external ingestion links. You can edit the text to
+              re-trigger the Multi-AI publishing pipeline or view the reader results.
             </p>
           </div>
 
@@ -209,14 +231,18 @@ function CmsWorkPage() {
         {loading ? (
           <div className="py-20 text-center">
             <RefreshCw className="h-6 w-6 text-ember animate-spin mx-auto mb-4" />
-            <span className="text-xs uppercase tracking-[0.2em] text-foreground/45 font-serif italic animate-pulse">Loading work files...</span>
+            <span className="text-xs uppercase tracking-[0.2em] text-foreground/45 font-serif italic animate-pulse">
+              Loading work files...
+            </span>
           </div>
         ) : filteredArticles.length === 0 ? (
           <div className="py-20 text-center border border-dashed border-line rounded-lg p-10 bg-card/5 max-w-2xl mx-auto">
             <FileText className="h-10 w-10 text-foreground/20 mx-auto mb-4" />
             <h3 className="font-serif text-xl text-foreground mb-2">No dispatches found</h3>
             <p className="text-xs text-foreground/50 max-w-md mx-auto leading-relaxed mb-6 font-light">
-              {searchQuery ? "No dispatches match your search filters. Try adjusting your query." : "You haven't composed or ingested any dispatches yet. Head over to the writer workspace to get started."}
+              {searchQuery
+                ? "No dispatches match your search filters. Try adjusting your query."
+                : "You haven't composed or ingested any dispatches yet. Head over to the writer workspace to get started."}
             </p>
             {!searchQuery && (
               <Link
@@ -235,7 +261,7 @@ function CmsWorkPage() {
                 <h3 className="text-xs uppercase tracking-[0.2em] text-foreground/40 font-medium flex items-center gap-2 select-none">
                   <Calendar className="h-3.5 w-3.5 text-ember" /> {groupHeader}
                 </h3>
-                
+
                 {/* Articles list */}
                 <div className="grid grid-cols-1 gap-4">
                   {groups[groupHeader].map((art) => (
@@ -265,11 +291,11 @@ function CmsWorkPage() {
                             </span>
                           )}
                         </div>
-                        
+
                         <h4 className="font-serif text-lg md:text-xl text-foreground font-medium truncate leading-tight">
                           {art.title}
                         </h4>
-                        
+
                         <span className="text-[9px] text-foreground/35 block truncate font-light">
                           {art.url}
                         </span>
@@ -302,14 +328,14 @@ function CmsWorkPage() {
                             </>
                           )}
                         </button>
-                        
+
                         <button
                           onClick={() => handleEdit(art.id)}
                           className="p-3 border border-line hover:border-ember hover:bg-ember/5 text-foreground/60 hover:text-foreground transition-all cursor-pointer flex items-center gap-2 text-[10px] uppercase tracking-[0.15em] font-medium"
                         >
                           <Edit3 className="h-3.5 w-3.5" /> Edit
                         </button>
-                        
+
                         <button
                           onClick={() => requestDelete(art.id, art.title)}
                           className="p-3 border border-line hover:border-destructive hover:bg-destructive/5 text-foreground/45 hover:text-destructive transition-all cursor-pointer flex items-center gap-2 text-[10px] uppercase tracking-[0.15em] font-medium"
@@ -342,15 +368,15 @@ function CmsWorkPage() {
               </AlertDialogTitle>
               <AlertDialogDescription className="text-base text-foreground/60 text-center font-light leading-relaxed">
                 Permanently deleting{" "}
-                <span className="text-foreground font-medium">"{deleteTarget?.title}"</span> 
-                {" "}cannot be undone. It will be removed from the platform index.
+                <span className="text-foreground font-medium">"{deleteTarget?.title}"</span> cannot
+                be undone. It will be removed from the platform index.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:justify-center w-full sm:space-x-0">
               <AlertDialogCancel className="mt-0 h-auto rounded-none border border-line text-[10px] uppercase tracking-[0.2em] px-8 py-4 bg-transparent hover:bg-card hover:text-foreground text-foreground/70 font-medium transition-colors w-full sm:w-auto focus:ring-0 focus:ring-offset-0">
                 Cancel
               </AlertDialogCancel>
-              <AlertDialogAction 
+              <AlertDialogAction
                 onClick={confirmDelete}
                 className="h-auto rounded-none bg-destructive text-destructive-foreground text-[10px] uppercase tracking-[0.2em] px-8 py-4 hover:bg-destructive/90 font-medium transition-colors w-full sm:w-auto focus:ring-0 focus:ring-offset-0"
               >

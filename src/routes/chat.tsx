@@ -20,7 +20,11 @@ export const Route = createFileRoute("/chat")({
   head: () => ({
     meta: [
       { title: "AI Reader Chat — Lumen" },
-      { name: "description", content: "Ask questions about any article in the Lumen feed, or search across all published stories." },
+      {
+        name: "description",
+        content:
+          "Ask questions about any article in the Lumen feed, or search across all published stories.",
+      },
     ],
   }),
   component: ChatPage,
@@ -35,7 +39,7 @@ type Message = {
 
 const renderMessageContent = (content: string) => {
   const lines = content.split("\n");
-  
+
   return lines.map((line, lineIdx) => {
     const trimmed = line.trim();
     if (!trimmed) return <div key={lineIdx} className="h-2" />;
@@ -43,7 +47,11 @@ const renderMessageContent = (content: string) => {
     const renderInline = (textStr: string) => {
       return textStr.split("*").map((chunk, idx) => {
         if (idx % 2 !== 0) {
-          return <span key={idx} className="text-ember font-semibold">{chunk}</span>;
+          return (
+            <span key={idx} className="text-ember font-semibold">
+              {chunk}
+            </span>
+          );
         }
         return chunk;
       });
@@ -68,7 +76,9 @@ const renderMessageContent = (content: string) => {
       return (
         <ol key={lineIdx} className="list-none my-1.5 pl-2">
           <li className="relative text-[15.5px] md:text-[17px] leading-relaxed text-foreground/95 font-display font-normal pl-6">
-            <span className="absolute left-0 text-xs font-semibold text-ember top-[0.15em]">{numMatch[1]}.</span>
+            <span className="absolute left-0 text-xs font-semibold text-ember top-[0.15em]">
+              {numMatch[1]}.
+            </span>
             {renderInline(numMatch[2])}
           </li>
         </ol>
@@ -76,7 +86,10 @@ const renderMessageContent = (content: string) => {
     }
 
     return (
-      <p key={lineIdx} className="text-[15.5px] md:text-[17px] leading-relaxed text-foreground/95 font-display font-normal mb-2 last:mb-0">
+      <p
+        key={lineIdx}
+        className="text-[15.5px] md:text-[17px] leading-relaxed text-foreground/95 font-display font-normal mb-2 last:mb-0"
+      >
         {renderInline(line)}
       </p>
     );
@@ -90,18 +103,19 @@ function ChatPage() {
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
-  
+
   const bottomRef = useRef<HTMLDivElement>(null);
   const lastAssistantRef = useRef<HTMLDivElement>(null);
 
   const initializeChat = (loggedIn: boolean) => {
     let welcomeText = "";
     if (loggedIn) {
-      welcomeText = article_id 
+      welcomeText = article_id
         ? "This article is ready. Ask me any questions about what is written — the main points, any claims, or how it connects to other stories."
         : "Ask me anything. I can search across all published stories in the feed and pull out what's relevant to your question.";
     } else {
-      welcomeText = "Hi — I'm the Lumen Assistant. You're not signed in, so I can answer general questions about how Lumen works, what features it has, and how to get started. Sign in or create a free account to ask questions about specific articles.";
+      welcomeText =
+        "Hi — I'm the Lumen Assistant. You're not signed in, so I can answer general questions about how Lumen works, what features it has, and how to get started. Sign in or create a free account to ask questions about specific articles.";
     }
 
     setMessages([
@@ -110,7 +124,7 @@ function ChatPage() {
         sender: "assistant",
         content: welcomeText,
         created_at: new Date(),
-      }
+      },
     ]);
   };
 
@@ -190,11 +204,11 @@ function ChatPage() {
       // Mocked RAG response if backend fails
       setTimeout(() => {
         const fallbackText = isLoggedIn
-          ? (article_id
-              ? "Based on this article, here are a few key takeaways:\n- The piece focuses on a specific development in its field, covering the main argument in detail.\n- It highlights practical implications for readers who follow the topic.\n- If you have a more specific question about what's written, feel free to ask."
-              : "Here's what I found across the feed:\n- Several stories touch on this topic from different angles.\n- The feed is updated regularly, so there may be newer articles covering this further.\n- Try asking a more specific question and I'll search for the most relevant match.")
+          ? article_id
+            ? "Based on this article, here are a few key takeaways:\n- The piece focuses on a specific development in its field, covering the main argument in detail.\n- It highlights practical implications for readers who follow the topic.\n- If you have a more specific question about what's written, feel free to ask."
+            : "Here's what I found across the feed:\n- Several stories touch on this topic from different angles.\n- The feed is updated regularly, so there may be newer articles covering this further.\n- Try asking a more specific question and I'll search for the most relevant match."
           : "Here's a quick overview of how Lumen works:\n- No ads: Lumen is a clean reading platform, funded by subscriptions.\n- Every article comes with a 3-card summary so you can read it in under 90 seconds.\n- You can also tap through to the full original article at any time.\n\nSign in or create a free account to ask questions about specific articles.";
-        
+
         setMessages((prev) => [
           ...prev,
           {
@@ -216,7 +230,6 @@ function ChatPage() {
       <Navbar />
 
       <main className="flex-1 flex flex-col pt-32 pb-16 max-w-5xl mx-auto w-full px-6">
-        
         {/* Magazine Cover style header */}
         <section className="border-b border-line pb-8 mb-12 flex-shrink-0 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
@@ -227,14 +240,14 @@ function ChatPage() {
               Ask the <span className="italic text-ember">Feed.</span>
             </h1>
             <p className="mt-4 text-sm text-foreground/50">
-              {isLoggedIn 
-                ? (article_id 
-                    ? "Asking about this article."
-                    : "Ask questions across all published stories.")
+              {isLoggedIn
+                ? article_id
+                  ? "Asking about this article."
+                  : "Ask questions across all published stories."
                 : "You're browsing as a guest."}
             </p>
           </div>
-          
+
           <button
             onClick={handleReset}
             className="flex items-center gap-2 px-5 py-3 bg-card/10 border border-line hover:border-ember/40 hover:bg-card text-[10px] uppercase tracking-[0.2em] font-medium text-foreground/70 hover:text-foreground transition-all cursor-pointer mb-1 md:mb-2"
@@ -282,25 +295,30 @@ function ChatPage() {
                         {isUser ? "Reader" : "Lumen AI"}
                       </span>
                       <span className="text-[8px] text-foreground/30">
-                        {m.created_at.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {m.created_at.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </span>
                     </div>
-                    
-                    <div className="space-y-1">
-                      {renderMessageContent(m.content)}
-                    </div>
+
+                    <div className="space-y-1">{renderMessageContent(m.content)}</div>
                   </div>
                 </div>
               );
             })}
-            
+
             {loading && (
               <div className="flex justify-start">
                 <div className="bg-ink border-l-2 border-line text-foreground/45 max-w-[80%] rounded-lg p-5">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-[9px] uppercase tracking-[0.2em] font-medium text-foreground/40">Lumen AI</span>
+                    <span className="text-[9px] uppercase tracking-[0.2em] font-medium text-foreground/40">
+                      Lumen AI
+                    </span>
                   </div>
-                  <p className="text-sm uppercase tracking-[0.2em] font-display font-normal animate-pulse">Thinking...</p>
+                  <p className="text-sm uppercase tracking-[0.2em] font-display font-normal animate-pulse">
+                    Thinking...
+                  </p>
                 </div>
               </div>
             )}

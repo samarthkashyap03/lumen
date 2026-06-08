@@ -18,7 +18,8 @@ export function CtaSection() {
           Start reading with <span className="italic text-ember">intention.</span>
         </h2>
         <p className="mt-10 max-w-xl mx-auto text-lg text-foreground/65 leading-relaxed">
-          Lumen is free to start. Join readers who've swapped the noise of social feeds for something that actually leaves them feeling informed.
+          Lumen is free to start. Join readers who've swapped the noise of social feeds for
+          something that actually leaves them feeling informed.
         </p>
         <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
           <Link

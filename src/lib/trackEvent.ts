@@ -8,7 +8,7 @@ import { API_URL } from "@/lib/config";
 export async function trackEvent(
   event_type: "view" | "swipe" | "read" | "dwell_time",
   article_id: string,
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown>,
 ) {
   try {
     const session = auth.getSession();

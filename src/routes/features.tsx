@@ -13,7 +13,7 @@ import {
   CheckCircle,
   TrendingUp,
   Clock,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
 
 // @ts-ignore
@@ -41,12 +41,16 @@ function FeatureSection({
   visual: React.ReactNode;
 }) {
   return (
-    <div className={`flex flex-col gap-8 md:gap-16 py-20 border-b border-line items-center ${reverse ? "md:flex-row-reverse" : "md:flex-row"}`}>
+    <div
+      className={`flex flex-col gap-8 md:gap-16 py-20 border-b border-line items-center ${reverse ? "md:flex-row-reverse" : "md:flex-row"}`}
+    >
       <div className="flex-1 w-full">
         <div className="h-12 w-12 border border-line bg-card/40 flex items-center justify-center mb-8">
           <Icon className="h-5 w-5 text-ember" />
         </div>
-        <h3 className="font-serif text-3xl md:text-4xl text-foreground mb-6 leading-tight">{title}</h3>
+        <h3 className="font-serif text-3xl md:text-4xl text-foreground mb-6 leading-tight">
+          {title}
+        </h3>
         <p className="text-foreground/70 text-lg leading-relaxed font-light">{description}</p>
       </div>
       <div className="flex-1 w-full flex items-center justify-center bg-card/5 border border-line/50 rounded-2xl p-6 md:p-10 min-h-[350px] relative overflow-hidden group">
@@ -65,7 +69,6 @@ function FeaturesPage() {
       <Navbar />
 
       <main className="pt-32 pb-24 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto w-full relative z-10">
-
         {/* Hero */}
         <section className="mb-16">
           <p className="text-ember font-medium tracking-[0.25em] uppercase text-xs mb-6">
@@ -75,7 +78,8 @@ function FeaturesPage() {
             Every feature, <span className="italic text-ember">designed for focus.</span>
           </h1>
           <p className="text-xl text-foreground/60 max-w-2xl font-light leading-relaxed">
-            Lumen is built to respect your time. Select your profile below to see how Lumen streamlines your workflow.
+            Lumen is built to respect your time. Select your profile below to see how Lumen
+            streamlines your workflow.
           </p>
         </section>
 
@@ -84,19 +88,21 @@ function FeaturesPage() {
           <div className="inline-flex p-1.5 border border-line bg-card/20 rounded-full relative z-20">
             <button
               onClick={() => setActiveTab("readers")}
-              className={`px-8 py-3 rounded-full text-xs uppercase tracking-[0.2em] font-semibold transition-all duration-300 cursor-pointer ${activeTab === "readers"
+              className={`px-8 py-3 rounded-full text-xs uppercase tracking-[0.2em] font-semibold transition-all duration-300 cursor-pointer ${
+                activeTab === "readers"
                   ? "bg-ember text-ink shadow-lg shadow-ember/15"
                   : "text-foreground/50 hover:text-foreground"
-                }`}
+              }`}
             >
               For Readers
             </button>
             <button
               onClick={() => setActiveTab("editors")}
-              className={`px-8 py-3 rounded-full text-xs uppercase tracking-[0.2em] font-semibold transition-all duration-300 cursor-pointer ${activeTab === "editors"
+              className={`px-8 py-3 rounded-full text-xs uppercase tracking-[0.2em] font-semibold transition-all duration-300 cursor-pointer ${
+                activeTab === "editors"
                   ? "bg-ember text-ink shadow-lg shadow-ember/15"
                   : "text-foreground/50 hover:text-foreground"
-                }`}
+              }`}
             >
               For Editors & Writers
             </button>
@@ -144,9 +150,12 @@ function FeaturesPage() {
                             </span>
                             <span className="text-xs text-foreground/40 font-mono">1 / 3</span>
                           </div>
-                          <h4 className="font-serif text-lg text-foreground mb-3 leading-snug">The Rise of Agentic AI</h4>
+                          <h4 className="font-serif text-lg text-foreground mb-3 leading-snug">
+                            The Rise of Agentic AI
+                          </h4>
                           <p className="text-xs text-foreground/70 leading-relaxed font-light">
-                            AI is transitioning from passive responders to active agents that can execute workflows, plan projects, and collaborate.
+                            AI is transitioning from passive responders to active agents that can
+                            execute workflows, plan projects, and collaborate.
                           </p>
                         </div>
                         <div className="flex justify-between items-center border-t border-line/50 pt-4 mt-4 text-[10px] text-foreground/40 uppercase tracking-wider">
@@ -169,16 +178,25 @@ function FeaturesPage() {
                         <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
                         <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50" />
                         <div className="w-2.5 h-2.5 rounded-full bg-green-500/50" />
-                        <span className="text-[10px] text-foreground/45 font-mono ml-4 truncate">lumen.press/article/silent-sanctuary</span>
+                        <span className="text-[10px] text-foreground/45 font-mono ml-4 truncate">
+                          lumen.press/article/silent-sanctuary
+                        </span>
                       </div>
                       <div className="p-6 h-[220px] overflow-hidden relative">
-                        <h4 className="text-xl mb-3 text-foreground leading-tight">The Silent Sanctuary</h4>
-                        <div className="text-[10px] font-sans text-foreground/50 mb-4 uppercase tracking-wider">By Helen Carter • 5 Min Read</div>
+                        <h4 className="text-xl mb-3 text-foreground leading-tight">
+                          The Silent Sanctuary
+                        </h4>
+                        <div className="text-[10px] font-sans text-foreground/50 mb-4 uppercase tracking-wider">
+                          By Helen Carter • 5 Min Read
+                        </div>
                         <p className="text-xs text-foreground/80 leading-relaxed font-light mb-3">
-                          In an era dominated by relentless notification pings and algorithmic feedback loops, our attention span has become a highly contested commodity.
+                          In an era dominated by relentless notification pings and algorithmic
+                          feedback loops, our attention span has become a highly contested
+                          commodity.
                         </p>
                         <p className="text-xs text-foreground/80 leading-relaxed font-light">
-                          To protect this cognitive resource, new spaces must be constructed. Spaces that prioritize deep reflection over mindless scrolling...
+                          To protect this cognitive resource, new spaces must be constructed. Spaces
+                          that prioritize deep reflection over mindless scrolling...
                         </p>
                         <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-ink to-transparent" />
                       </div>
@@ -194,20 +212,31 @@ function FeaturesPage() {
                     <div className="w-full max-w-[320px] border border-line bg-ink rounded-xl p-4 flex flex-col justify-between min-h-[260px] shadow-2xl font-sans">
                       <div className="space-y-4">
                         <div className="flex gap-2.5 items-start">
-                          <div className="h-6 w-6 rounded-full bg-line flex items-center justify-center text-[10px] font-semibold text-foreground/75">U</div>
+                          <div className="h-6 w-6 rounded-full bg-line flex items-center justify-center text-[10px] font-semibold text-foreground/75">
+                            U
+                          </div>
                           <div className="bg-card/45 border border-line rounded-lg p-2.5 max-w-[80%]">
-                            <p className="text-[11px] text-foreground/80">Summarize the main critique of the new architecture.</p>
+                            <p className="text-[11px] text-foreground/80">
+                              Summarize the main critique of the new architecture.
+                            </p>
                           </div>
                         </div>
                         <div className="flex gap-2.5 items-start justify-end">
                           <div className="bg-ember/5 border border-ember/25 rounded-lg p-2.5 max-w-[80%] text-right">
-                            <p className="text-[11px] text-foreground/90">It highlights high latency and coordination complexity among autonomous nodes.</p>
+                            <p className="text-[11px] text-foreground/90">
+                              It highlights high latency and coordination complexity among
+                              autonomous nodes.
+                            </p>
                           </div>
-                          <div className="h-6 w-6 rounded-full bg-ember/20 border border-ember/30 flex items-center justify-center text-[10px] font-semibold text-ember">L</div>
+                          <div className="h-6 w-6 rounded-full bg-ember/20 border border-ember/30 flex items-center justify-center text-[10px] font-semibold text-ember">
+                            L
+                          </div>
                         </div>
                       </div>
                       <div className="border border-line rounded-lg bg-card/10 p-2 flex items-center justify-between mt-4">
-                        <span className="text-[10px] text-foreground/50">Ask Lumen anything...</span>
+                        <span className="text-[10px] text-foreground/50">
+                          Ask Lumen anything...
+                        </span>
                         <Sparkles className="h-3.5 w-3.5 text-ember" />
                       </div>
                     </div>
@@ -235,9 +264,12 @@ function FeaturesPage() {
                   visual={
                     <div className="w-full max-w-[340px] border border-line bg-ink rounded-xl p-5 shadow-2xl font-sans flex flex-col gap-4">
                       <div className="flex justify-between items-center border-b border-line pb-3">
-                        <span className="text-xs font-semibold text-foreground/80">Composer Sandbox</span>
+                        <span className="text-xs font-semibold text-foreground/80">
+                          Composer Sandbox
+                        </span>
                         <span className="text-[9px] uppercase tracking-wider text-green-500 bg-green-500/10 px-2 py-0.5 rounded flex items-center gap-1 font-mono">
-                          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" /> Ingesting
+                          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />{" "}
+                          Ingesting
                         </span>
                       </div>
                       <div className="space-y-3">
@@ -248,18 +280,33 @@ function FeaturesPage() {
                       </div>
                       {/* AI Agent Assembly Line Status */}
                       <div className="border-t border-line/50 pt-3 mt-1 space-y-2">
-                        <div className="text-[9px] uppercase tracking-wider text-foreground/40 mb-2 font-mono">AI Agents Processing</div>
-                        <div className="flex justify-between items-center text-[10px] text-foreground/70">
-                          <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-green-500" /> Analyzer Agent</span>
-                          <span className="text-[9px] font-mono text-foreground/40">Themes Mapped</span>
+                        <div className="text-[9px] uppercase tracking-wider text-foreground/40 mb-2 font-mono">
+                          AI Agents Processing
                         </div>
                         <div className="flex justify-between items-center text-[10px] text-foreground/70">
-                          <span className="flex items-center gap-1.5"><CheckCircle className="h-3.5 w-3.5 text-green-500" /> Chunker Agent</span>
-                          <span className="text-[9px] font-mono text-foreground/40">12 Paragraphs</span>
+                          <span className="flex items-center gap-1.5">
+                            <CheckCircle className="h-3.5 w-3.5 text-green-500" /> Analyzer Agent
+                          </span>
+                          <span className="text-[9px] font-mono text-foreground/40">
+                            Themes Mapped
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center text-[10px] text-foreground/70">
+                          <span className="flex items-center gap-1.5">
+                            <CheckCircle className="h-3.5 w-3.5 text-green-500" /> Chunker Agent
+                          </span>
+                          <span className="text-[9px] font-mono text-foreground/40">
+                            12 Paragraphs
+                          </span>
                         </div>
                         <div className="flex justify-between items-center text-[10px] text-foreground/75 font-medium">
-                          <span className="flex items-center gap-1.5"><span className="h-3.5 w-3.5 rounded-full border-2 border-t-transparent border-ember animate-spin" /> Card Generator</span>
-                          <span className="text-[9px] font-mono text-ember">Drafting Insight 2...</span>
+                          <span className="flex items-center gap-1.5">
+                            <span className="h-3.5 w-3.5 rounded-full border-2 border-t-transparent border-ember animate-spin" />{" "}
+                            Card Generator
+                          </span>
+                          <span className="text-[9px] font-mono text-ember">
+                            Drafting Insight 2...
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -274,16 +321,24 @@ function FeaturesPage() {
                   visual={
                     <div className="w-full max-w-[300px] border border-line bg-ink rounded-xl p-5 shadow-2xl font-sans space-y-5">
                       <div className="flex justify-between items-center">
-                        <span className="text-xs font-semibold text-foreground/80">Pulse Analytics</span>
-                        <span className="text-[9px] uppercase tracking-wider text-ember bg-ember/10 px-2 py-0.5 rounded font-mono">Live</span>
+                        <span className="text-xs font-semibold text-foreground/80">
+                          Pulse Analytics
+                        </span>
+                        <span className="text-[9px] uppercase tracking-wider text-ember bg-ember/10 px-2 py-0.5 rounded font-mono">
+                          Live
+                        </span>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="border border-line/55 bg-card/20 p-3 rounded-lg">
-                          <div className="text-[9px] text-foreground/40 uppercase tracking-wider flex items-center gap-1"><Clock className="h-3 w-3" /> Completion</div>
+                          <div className="text-[9px] text-foreground/40 uppercase tracking-wider flex items-center gap-1">
+                            <Clock className="h-3 w-3" /> Completion
+                          </div>
                           <div className="text-lg font-serif mt-1">78.4%</div>
                         </div>
                         <div className="border border-line/55 bg-card/20 p-3 rounded-lg">
-                          <div className="text-[9px] text-foreground/40 uppercase tracking-wider flex items-center gap-1"><TrendingUp className="h-3 w-3" /> Read Rate</div>
+                          <div className="text-[9px] text-foreground/40 uppercase tracking-wider flex items-center gap-1">
+                            <TrendingUp className="h-3 w-3" /> Read Rate
+                          </div>
                           <div className="text-lg font-serif mt-1">42.1%</div>
                         </div>
                       </div>
@@ -311,7 +366,8 @@ function FeaturesPage() {
           <Settings2 className="h-10 w-10 text-ember mb-6" />
           <h2 className="font-serif text-4xl md:text-5xl mb-6">Curious how it works?</h2>
           <p className="text-lg text-foreground/60 font-light mb-10 max-w-xl leading-relaxed">
-            All of this is powered by a behind-the-scenes team of AI agents working together like an assembly line. It's surprisingly simple once you break it down.
+            All of this is powered by a behind-the-scenes team of AI agents working together like an
+            assembly line. It's surprisingly simple once you break it down.
           </p>
           <Link
             to={"/tech-stack" as any}
@@ -320,7 +376,6 @@ function FeaturesPage() {
             Read about our Tech Stack
           </Link>
         </section>
-
       </main>
       <Footer />
     </div>

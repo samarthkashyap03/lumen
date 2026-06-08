@@ -3,7 +3,19 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from "recharts";
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+  PieChart,
+  Pie,
+} from "recharts";
 import { Eye, Smartphone, Clock, Award, Users, BookOpen } from "lucide-react";
 import { API_URL } from "@/lib/config";
 import { auth } from "@/lib/auth";
@@ -44,9 +56,9 @@ const DEFAULT_ANALYTICS: AnalyticsData = {
     { day: "Thu", swipes: 0, reads: 0 },
     { day: "Fri", swipes: 0, reads: 0 },
     { day: "Sat", swipes: 0, reads: 0 },
-    { day: "Sun", swipes: 0, reads: 0 }
+    { day: "Sun", swipes: 0, reads: 0 },
   ],
-  category_distribution: []
+  category_distribution: [],
 };
 
 const PIE_COLORS = ["#e85d3a", "#2d2826", "#f5f1e8", "#1a1816"];
@@ -95,7 +107,6 @@ function AnalyticsPage() {
       <Navbar />
 
       <main className="flex-1 pt-32 pb-24 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto w-full">
-        
         {/* Editorial layout header */}
         <section className="border-b border-line pb-8 mb-16">
           <p className="text-ember font-medium tracking-[0.25em] uppercase text-xs mb-4">
@@ -106,7 +117,7 @@ function AnalyticsPage() {
           </h1>
           <p className="mt-4 text-sm text-foreground/50">
             Real-time visual reports computed from your actual article and user data.
-        </p>
+          </p>
         </section>
 
         {/* High-level Metric Cards */}
@@ -117,7 +128,7 @@ function AnalyticsPage() {
             { label: "Total Views", val: data.total_views, icon: Eye },
             { label: "Total Swipes", val: data.total_swipes, icon: Smartphone },
             { label: "Long-form Reads", val: data.total_reads, icon: Award },
-            { label: "Avg Dwell Time", val: `${data.dwell_time_avg}s`, icon: Clock }
+            { label: "Avg Dwell Time", val: `${data.dwell_time_avg}s`, icon: Clock },
           ].map((m, idx) => (
             <motion.div
               key={m.label}
@@ -127,51 +138,61 @@ function AnalyticsPage() {
               className="border border-line bg-card/10 p-6 flex flex-col justify-between h-36"
             >
               <div className="flex justify-between items-start">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-foreground/45 font-medium">{m.label}</span>
+                <span className="text-[10px] uppercase tracking-[0.2em] text-foreground/45 font-medium">
+                  {m.label}
+                </span>
                 <m.icon className="h-4 w-4 text-ember" />
               </div>
-              <div className="font-serif text-4xl md:text-5xl font-light mt-auto">
-                {m.val}
-              </div>
+              <div className="font-serif text-4xl md:text-5xl font-light mt-auto">{m.val}</div>
             </motion.div>
           ))}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
-          
           {/* Daily swipe activity chart */}
           <div className="lg:col-span-8 border border-line bg-card/10 p-8 rounded-lg flex flex-col justify-between min-h-[400px]">
             <h3 className="font-serif text-2xl text-foreground mb-6">Interaction Rhythms</h3>
             <div className="flex-1 w-full h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data.swipe_rate_by_day} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <XAxis 
-                    dataKey="day" 
-                    stroke="var(--line)" 
-                    tick={{ fill: "rgba(245, 241, 232, 0.4)", fontSize: 10, letterSpacing: "0.1em" }} 
+                <LineChart
+                  data={data.swipe_rate_by_day}
+                  margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                >
+                  <XAxis
+                    dataKey="day"
+                    stroke="var(--line)"
+                    tick={{
+                      fill: "rgba(245, 241, 232, 0.4)",
+                      fontSize: 10,
+                      letterSpacing: "0.1em",
+                    }}
                   />
-                  <YAxis 
-                    stroke="var(--line)" 
-                    tick={{ fill: "rgba(245, 241, 232, 0.4)", fontSize: 10 }} 
+                  <YAxis
+                    stroke="var(--line)"
+                    tick={{ fill: "rgba(245, 241, 232, 0.4)", fontSize: 10 }}
                   />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: "var(--ink)", borderColor: "var(--line)" }} 
-                    labelStyle={{ color: "var(--ember)", fontFamily: "Instrument Serif", fontStyle: "italic" }}
+                  <Tooltip
+                    contentStyle={{ backgroundColor: "var(--ink)", borderColor: "var(--line)" }}
+                    labelStyle={{
+                      color: "var(--ember)",
+                      fontFamily: "Instrument Serif",
+                      fontStyle: "italic",
+                    }}
                   />
-                  <Line 
-                    type="monotone" 
-                    dataKey="swipes" 
-                    stroke="#e85d3a" 
-                    strokeWidth={2.5} 
-                    dot={{ fill: "#e85d3a", strokeWidth: 0, r: 4 }} 
-                    activeDot={{ r: 6 }} 
+                  <Line
+                    type="monotone"
+                    dataKey="swipes"
+                    stroke="#e85d3a"
+                    strokeWidth={2.5}
+                    dot={{ fill: "#e85d3a", strokeWidth: 0, r: 4 }}
+                    activeDot={{ r: 6 }}
                   />
-                  <Line 
-                    type="monotone" 
-                    dataKey="reads" 
-                    stroke="#f5f1e8" 
-                    strokeWidth={1.5} 
-                    dot={{ fill: "#f5f1e8", strokeWidth: 0, r: 3 }} 
+                  <Line
+                    type="monotone"
+                    dataKey="reads"
+                    stroke="#f5f1e8"
+                    strokeWidth={1.5}
+                    dot={{ fill: "#f5f1e8", strokeWidth: 0, r: 3 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -205,20 +226,20 @@ function AnalyticsPage() {
                       <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: "var(--ink)", borderColor: "var(--line)" }}
                     itemStyle={{ color: "var(--foreground)" }}
                   />
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-4 mt-6 border-t border-line/40 pt-4">
               {data.category_distribution.map((entry, index) => (
                 <div key={entry.name} className="flex items-center gap-2 text-xs">
-                  <span 
-                    className="h-2 w-2 rounded-full inline-block" 
-                    style={{ backgroundColor: PIE_COLORS[index % PIE_COLORS.length] }} 
+                  <span
+                    className="h-2 w-2 rounded-full inline-block"
+                    style={{ backgroundColor: PIE_COLORS[index % PIE_COLORS.length] }}
                   />
                   <span className="text-foreground/60">{entry.name}</span>
                   <span className="font-medium text-foreground ml-auto">{entry.value}%</span>

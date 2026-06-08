@@ -36,7 +36,9 @@ export function Hero() {
                 Start Reading
               </Link>
               <button
-                onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() =>
+                  document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })
+                }
                 className="px-8 py-4 border border-line text-xs tracking-[0.15em] uppercase hover:bg-card transition-colors duration-500 cursor-pointer"
               >
                 See How It Works
@@ -63,8 +65,12 @@ export function Hero() {
       </div>
 
       <div className="relative z-10 mt-24 pt-6 border-t border-line flex justify-between items-end">
-        <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/40">Editorial No. 001</span>
-        <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 font-serif italic">Designed for focus</span>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/40">
+          Editorial No. 001
+        </span>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 font-serif italic">
+          Designed for focus
+        </span>
       </div>
     </section>
   );

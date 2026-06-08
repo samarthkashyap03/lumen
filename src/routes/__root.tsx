@@ -35,12 +35,11 @@ function NotFoundComponent() {
 
         <div className="-mt-8 space-y-4">
           <h1 className="font-serif italic text-4xl md:text-6xl leading-[0.95] text-foreground">
-            This page has{" "}
-            <span className="text-ember">gone quiet.</span>
+            This page has <span className="text-ember">gone quiet.</span>
           </h1>
           <p className="text-base text-foreground/55 font-light max-w-md mx-auto leading-relaxed border-l-2 border-ember pl-5 text-left">
-            The page you were looking for doesn't exist or has been moved.
-            Head back to the sanctuary and keep reading.
+            The page you were looking for doesn't exist or has been moved. Head back to the
+            sanctuary and keep reading.
           </p>
         </div>
 
@@ -62,8 +61,12 @@ function NotFoundComponent() {
 
       {/* Bottom rule */}
       <div className="absolute bottom-6 inset-x-0 px-6 md:px-12 lg:px-20 flex justify-between">
-        <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/25">Lumen — N°01</span>
-        <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/25 font-serif italic">Page not found</span>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/25">
+          Lumen — N°01
+        </span>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/25 font-serif italic">
+          Page not found
+        </span>
       </div>
     </div>
   );
@@ -91,12 +94,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 
         <div className="space-y-4">
           <h1 className="font-serif italic text-4xl md:text-6xl leading-[0.95] text-foreground">
-            Something{" "}
-            <span className="text-ember">broke.</span>
+            Something <span className="text-ember">broke.</span>
           </h1>
           <p className="text-base text-foreground/55 font-light max-w-md mx-auto leading-relaxed border-l-2 border-ember pl-5 text-left">
-            An unexpected error occurred on our end. You can try again or head
-            back to the sanctuary.
+            An unexpected error occurred on our end. You can try again or head back to the
+            sanctuary.
           </p>
 
           {/* Error message in a code-like block */}
@@ -133,8 +135,12 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 
       {/* Bottom rule */}
       <div className="absolute bottom-6 inset-x-0 px-6 md:px-12 lg:px-20 flex justify-between">
-        <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/25">Lumen — N°01</span>
-        <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/25 font-serif italic">Unexpected error</span>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/25">
+          Lumen — N°01
+        </span>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/25 font-serif italic">
+          Unexpected error
+        </span>
       </div>
     </div>
   );
@@ -146,16 +152,39 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Lumen — Journalism, recomposed." },
-      { name: "description", content: "An editorial reading sanctuary. AI distils the noise so you can settle into the story. Designed for depth, built for the curious." },
+      {
+        name: "description",
+        content:
+          "An editorial reading sanctuary. AI distils the noise so you can settle into the story. Designed for depth, built for the curious.",
+      },
       { name: "author", content: "Lumen" },
       { property: "og:title", content: "Lumen — Journalism, recomposed." },
-      { property: "og:description", content: "An editorial reading sanctuary for the curious mind." },
+      {
+        property: "og:description",
+        content: "An editorial reading sanctuary for the curious mind.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Lumen — Journalism, recomposed." },
-      { name: "twitter:description", content: "An editorial reading sanctuary for the curious mind." },
+      {
+        name: "twitter:description",
+        content: "An editorial reading sanctuary for the curious mind.",
+      },
     ],
     links: [
+      {
+        rel: "preconnect",
+        href: "https://fonts.googleapis.com",
+      },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600&display=swap",
+      },
       {
         rel: "stylesheet",
         href: appCss,

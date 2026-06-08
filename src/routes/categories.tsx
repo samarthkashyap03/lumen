@@ -7,7 +7,10 @@ export const Route = createFileRoute("/categories")({
   head: () => ({
     meta: [
       { title: "Categories — Lumen" },
-      { name: "description", content: "Browse Lumen by topic — Technology, Science, Politics, Startups, Lifestyle, AI." },
+      {
+        name: "description",
+        content: "Browse Lumen by topic — Technology, Science, Politics, Startups, Lifestyle, AI.",
+      },
       { property: "og:title", content: "Categories — Lumen" },
       { property: "og:description", content: "Browse Lumen by topic." },
     ],

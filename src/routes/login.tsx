@@ -48,9 +48,9 @@ function Login() {
 
       const data = await response.json();
       auth.setSession(data.session_token, data.user_id, data.name, data.role);
-      
+
       toast.success(`Welcome back, ${data.name}!`);
-      
+
       if (data.role === "editor") {
         navigate({ to: "/cms" });
       } else {
@@ -75,9 +75,7 @@ function Login() {
           <h1 className="font-serif text-4xl md:text-5xl leading-none italic text-foreground">
             Welcome back.
           </h1>
-          <p className="mt-3 text-sm text-foreground/50">
-            Sign in to resume reading with intent.
-          </p>
+          <p className="mt-3 text-sm text-foreground/50">Sign in to resume reading with intent.</p>
 
           <form className="mt-8 space-y-6" onSubmit={handleLogin}>
             {/* Role Toggle Selector */}
@@ -112,7 +110,10 @@ function Login() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-[10px] uppercase tracking-[0.25em] text-foreground/60">
+              <Label
+                htmlFor="email"
+                className="text-[10px] uppercase tracking-[0.25em] text-foreground/60"
+              >
                 Email Address
               </Label>
               <Input
@@ -127,7 +128,10 @@ function Login() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-[10px] uppercase tracking-[0.25em] text-foreground/60">
+              <Label
+                htmlFor="password"
+                className="text-[10px] uppercase tracking-[0.25em] text-foreground/60"
+              >
                 Password
               </Label>
               <Input
@@ -151,7 +155,10 @@ function Login() {
 
           <p className="mt-8 text-center text-sm text-foreground/50 font-light">
             New here?{" "}
-            <Link to="/register" className="text-ember italic font-serif font-normal hover:underline">
+            <Link
+              to="/register"
+              className="text-ember italic font-serif font-normal hover:underline"
+            >
               Create an account
             </Link>
           </p>

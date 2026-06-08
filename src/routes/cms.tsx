@@ -3,7 +3,17 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { Plus, Check, RefreshCw, AlertCircle, Link2, FileText, ArrowRight, Star, Share2 } from "lucide-react";
+import {
+  Plus,
+  Check,
+  RefreshCw,
+  AlertCircle,
+  Link2,
+  FileText,
+  ArrowRight,
+  Star,
+  Share2,
+} from "lucide-react";
 import { auth } from "@/lib/auth";
 import { toast } from "sonner";
 import { API_URL } from "@/lib/config";
@@ -12,7 +22,10 @@ export const Route = createFileRoute("/cms")({
   head: () => ({
     meta: [
       { title: "Curation Dashboard — Lumen" },
-      { name: "description", content: "Submit URLs and compose dispatches for the multi-agent pipeline." },
+      {
+        name: "description",
+        content: "Submit URLs and compose dispatches for the multi-agent pipeline.",
+      },
     ],
   }),
   component: CmsPage,
@@ -40,7 +53,7 @@ const getEditorStats = (completedCount: number) => {
   let stars = 0;
   let title = "Novice Writer";
   let encouragement = "";
-  
+
   if (completedCount < 3) {
     stars = 0;
     title = "Novice Writer";
@@ -87,7 +100,10 @@ function CmsPage() {
 
   const [session, setSession] = useState<any>(null);
   const [mounted, setMounted] = useState(false);
-  const [healthStatus, setHealthStatus] = useState<{ supabase_configured: boolean; groq_configured: boolean } | null>(null);
+  const [healthStatus, setHealthStatus] = useState<{
+    supabase_configured: boolean;
+    groq_configured: boolean;
+  } | null>(null);
 
   // Route guarding & Health Check: check if user is editor
   useEffect(() => {
@@ -231,13 +247,19 @@ function CmsPage() {
             <p className="text-ember font-medium tracking-[0.25em] uppercase text-xs mb-4 flex flex-wrap items-center gap-3">
               <span>Curation Workspace</span>
               {healthStatus && (
-                <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] font-medium tracking-normal normal-case border ${
-                  healthStatus.groq_configured 
-                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" 
-                    : "bg-amber-500/10 text-amber-400 border-amber-500/20"
-                }`}>
-                  <span className={`h-1.5 w-1.5 rounded-full ${healthStatus.groq_configured ? "bg-emerald-400 animate-pulse" : "bg-amber-400"}`} />
-                  {healthStatus.groq_configured ? "AI Engine: Live Groq API" : "AI Engine: Offline Mock Mode"}
+                <span
+                  className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] font-medium tracking-normal normal-case border ${
+                    healthStatus.groq_configured
+                      ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                      : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                  }`}
+                >
+                  <span
+                    className={`h-1.5 w-1.5 rounded-full ${healthStatus.groq_configured ? "bg-emerald-400 animate-pulse" : "bg-amber-400"}`}
+                  />
+                  {healthStatus.groq_configured
+                    ? "AI Engine: Live Groq API"
+                    : "AI Engine: Offline Mock Mode"}
                 </span>
               )}
             </p>
@@ -245,7 +267,8 @@ function CmsPage() {
               Writer <span className="italic text-ember">Desk.</span>
             </h1>
             <p className="mt-4 text-sm text-foreground/50 max-w-xl font-light leading-relaxed">
-              Compose manual dispatches or scrape source URL materials. Our multi-AI-agent pipeline will analyze themes, generate, and optimize reading cards.
+              Compose manual dispatches or scrape source URL materials. Our multi-AI-agent pipeline
+              will analyze themes, generate, and optimize reading cards.
             </p>
           </div>
 
@@ -268,7 +291,8 @@ function CmsPage() {
                 className="border border-line bg-card/25 p-8 rounded-lg"
               >
                 <h3 className="font-serif text-xl text-foreground mb-6 flex items-center gap-3">
-                  <RefreshCw className="h-4 w-4 text-ember animate-spin" /> Ingestion Pipeline Running...
+                  <RefreshCw className="h-4 w-4 text-ember animate-spin" /> Ingestion Pipeline
+                  Running...
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
@@ -283,8 +307,8 @@ function CmsPage() {
                           isDone
                             ? "border-ember/40 bg-ember/5 text-foreground"
                             : isCurrent
-                            ? "border-ember bg-card/60 text-foreground"
-                            : "border-line text-foreground/30"
+                              ? "border-ember bg-card/60 text-foreground"
+                              : "border-line text-foreground/30"
                         }`}
                       >
                         <span className="text-[10px] tracking-widest uppercase text-foreground/50">
@@ -309,9 +333,12 @@ function CmsPage() {
 
             {/* Ingestion URL Form */}
             <div className="border border-line bg-card/10 p-8 rounded-lg">
-              <h2 className="font-serif text-2xl text-foreground mb-3">Scrape Ingest Alternative</h2>
+              <h2 className="font-serif text-2xl text-foreground mb-3">
+                Scrape Ingest Alternative
+              </h2>
               <p className="text-xs text-foreground/50 mb-6 font-light">
-                Paste an external article URL. A web scraper will fetch content before triggering the Multi-AI pipeline.
+                Paste an external article URL. A web scraper will fetch content before triggering
+                the Multi-AI pipeline.
               </p>
               <form onSubmit={handleSubmitUrl} className="flex gap-4">
                 <div className="relative flex-1">
@@ -341,9 +368,7 @@ function CmsPage() {
           <div className="lg:col-span-5 border border-line bg-card/10 p-8 rounded-lg space-y-8">
             <div className="space-y-4">
               <div>
-                <h2 className="font-serif text-2xl text-foreground mb-1">
-                  Writer Achievement
-                </h2>
+                <h2 className="font-serif text-2xl text-foreground mb-1">Writer Achievement</h2>
                 <p className="text-xs text-foreground/50 font-light">
                   Earn stars and points for every dispatch successfully compiled in the sanctuary.
                 </p>
@@ -361,22 +386,23 @@ function CmsPage() {
             {/* Achievement Card */}
             <div className="border border-line bg-ink/40 p-6 rounded-lg space-y-6 relative overflow-hidden">
               <div className="absolute top-0 right-0 h-24 w-24 bg-ember/5 rounded-full blur-2xl animate-pulse" />
-              
+
               <div className="flex justify-between items-start relative z-10">
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.2em] text-ember font-semibold">
                     Editor Status
                   </p>
-                  <h3 className="text-xl font-serif mt-1">
-                    {stats.title}
-                  </h3>
+                  <h3 className="text-xl font-serif mt-1">{stats.title}</h3>
                 </div>
                 <div className="text-right">
                   <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/40 font-semibold">
                     Total Score
                   </p>
                   <p className="text-xl font-serif text-ember mt-1 font-semibold">
-                    {completedCount * 150} <span className="text-[10px] uppercase tracking-normal font-sans text-foreground/60">pts</span>
+                    {completedCount * 150}{" "}
+                    <span className="text-[10px] uppercase tracking-normal font-sans text-foreground/60">
+                      pts
+                    </span>
                   </p>
                 </div>
               </div>
@@ -388,7 +414,9 @@ function CmsPage() {
                 </p>
                 <div className="flex flex-wrap gap-2.5 min-h-[28px] items-center">
                   {stats.stars === 0 ? (
-                    <span className="text-[11px] text-foreground/30 italic">No stars earned yet. Publish more dispatches.</span>
+                    <span className="text-[11px] text-foreground/30 italic">
+                      No stars earned yet. Publish more dispatches.
+                    </span>
                   ) : (
                     Array.from({ length: stats.stars }).map((_, i) => (
                       <motion.div

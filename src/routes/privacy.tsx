@@ -8,7 +8,10 @@ export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
       { title: "Privacy Policy — Lumen" },
-      { name: "description", content: "How Lumen handles and protects your personal reading data." },
+      {
+        name: "description",
+        content: "How Lumen handles and protects your personal reading data.",
+      },
     ],
   }),
   component: PrivacyPage,
@@ -22,17 +25,24 @@ const PRIVACY_SECTIONS = [
     content: (
       <>
         <p>
-          We believe in collecting only the absolute minimum amount of information required to deliver a functional, high-quality reading experience.
+          We believe in collecting only the absolute minimum amount of information required to
+          deliver a functional, high-quality reading experience.
         </p>
         <ul className="list-disc pl-5 mt-4 space-y-2 text-foreground/70 text-sm">
           <li>
-            <strong>Account Credentials:</strong> If you create a reader or editor account, we collect your email address, name, and password (securely hashed) to manage your authentication.
+            <strong>Account Credentials:</strong> If you create a reader or editor account, we
+            collect your email address, name, and password (securely hashed) to manage your
+            authentication.
           </li>
           <li>
-            <strong>Reading Preferences:</strong> We store your saved articles list, bookmarks, and read-state parameters locally or on our secure database to sync your experience across devices.
+            <strong>Reading Preferences:</strong> We store your saved articles list, bookmarks, and
+            read-state parameters locally or on our secure database to sync your experience across
+            devices.
           </li>
           <li>
-            <strong>Usage Metrics:</strong> We compile aggregate statistics (such as total views, swipes, and reading time) to provide insights to our editors. This data is fully anonymized and does not track individual identity.
+            <strong>Usage Metrics:</strong> We compile aggregate statistics (such as total views,
+            swipes, and reading time) to provide insights to our editors. This data is fully
+            anonymized and does not track individual identity.
           </li>
         </ul>
       </>
@@ -45,15 +55,16 @@ const PRIVACY_SECTIONS = [
     content: (
       <>
         <p>
-          Your information is used strictly to run and improve the Lumen platform. We do not sell, rent, or trade your data with advertising networks or third-party brokers.
+          Your information is used strictly to run and improve the Lumen platform. We do not sell,
+          rent, or trade your data with advertising networks or third-party brokers.
         </p>
-        <p className="mt-3">
-          Specifically, we use it to:
-        </p>
+        <p className="mt-3">Specifically, we use it to:</p>
         <ul className="list-disc pl-5 mt-3 space-y-2 text-foreground/70 text-sm">
           <li>Authenticate and manage your user session.</li>
           <li>Synchronize your personal reading library.</li>
-          <li>Provide platform-wide analytics for editors regarding article reach and engagement.</li>
+          <li>
+            Provide platform-wide analytics for editors regarding article reach and engagement.
+          </li>
           <li>Respond to support requests or contact inquiries.</li>
         </ul>
       </>
@@ -66,10 +77,14 @@ const PRIVACY_SECTIONS = [
     content: (
       <>
         <p>
-          We implement standard security measures to protect your credentials and data. Passwords are encrypted using industry-standard hashing functions before they ever reach our storage systems.
+          We implement standard security measures to protect your credentials and data. Passwords
+          are encrypted using industry-standard hashing functions before they ever reach our storage
+          systems.
         </p>
         <p className="mt-3">
-          Although no electronic transmission or storage method is completely secure, we actively monitor our databases and keep our software dependencies up to date to minimize security vulnerabilities.
+          Although no electronic transmission or storage method is completely secure, we actively
+          monitor our databases and keep our software dependencies up to date to minimize security
+          vulnerabilities.
         </p>
       </>
     ),
@@ -81,10 +96,13 @@ const PRIVACY_SECTIONS = [
     content: (
       <>
         <p>
-          You remain in full control of your reading data. You have the right to request access to, correction of, or deletion of your personal account at any time.
+          You remain in full control of your reading data. You have the right to request access to,
+          correction of, or deletion of your personal account at any time.
         </p>
         <p className="mt-3">
-          If you wish to terminate your account and wipe all database entries associated with your email address, you can do so by contacting us directly. We process all deletion requests within 30 days.
+          If you wish to terminate your account and wipe all database entries associated with your
+          email address, you can do so by contacting us directly. We process all deletion requests
+          within 30 days.
         </p>
       </>
     ),
@@ -96,7 +114,8 @@ const PRIVACY_SECTIONS = [
     content: (
       <>
         <p>
-          If you have any questions or concerns regarding our privacy practices, please contact our support team.
+          If you have any questions or concerns regarding our privacy practices, please contact our
+          support team.
         </p>
         <p className="mt-3">
           Email: <span className="text-ember font-serif italic">samarthkashyap.de@gmail.com</span>
@@ -128,7 +147,8 @@ function PrivacyPage() {
             Privacy Policy.
           </h1>
           <p className="text-base text-foreground/60 font-light max-w-xl border-l border-ember pl-5 leading-relaxed">
-            Last updated: June 7, 2026. This policy outlines how we handle your personal data. We keep it straightforward, standard, and transparent.
+            Last updated: June 7, 2026. This policy outlines how we handle your personal data. We
+            keep it straightforward, standard, and transparent.
           </p>
         </motion.div>
       </section>
@@ -158,10 +178,15 @@ function PrivacyPage() {
           <div className="lg:col-span-9 space-y-16">
             <div className="prose prose-invert max-w-none text-base md:text-lg text-foreground/75 leading-relaxed font-light space-y-6">
               <p>
-                Lumen is designed to be a sanctuary for readers. We value the trust you place in us, and we are committed to respecting and protecting your privacy. This document explains what information we collect, how it is stored, and your rights concerning that data.
+                Lumen is designed to be a sanctuary for readers. We value the trust you place in us,
+                and we are committed to respecting and protecting your privacy. This document
+                explains what information we collect, how it is stored, and your rights concerning
+                that data.
               </p>
               <p>
-                By using Lumen, you agree to the terms laid out in this Privacy Policy. If you do not agree with any part of this document, please discontinue use of the site and services.
+                By using Lumen, you agree to the terms laid out in this Privacy Policy. If you do
+                not agree with any part of this document, please discontinue use of the site and
+                services.
               </p>
             </div>
 

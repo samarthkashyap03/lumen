@@ -26,10 +26,13 @@ export function FeatureBento() {
             </h2>
             <div className="space-y-8 text-lg md:text-xl text-foreground/80 leading-relaxed max-w-xl">
               <p>
-                Most news apps are built to maximize time spent. Lumen is built to make that time feel worthwhile. There's a difference — and you can feel it in the first five minutes.
+                Most news apps are built to maximize time spent. Lumen is built to make that time
+                feel worthwhile. There's a difference — and you can feel it in the first five
+                minutes.
               </p>
               <p className="lg:pl-8 border-l border-ember py-2">
-                Lumen's design is inspired by print magazines: clean layouts, no pop-ups, no autoplay. Just the story, the way it was meant to be read.
+                Lumen's design is inspired by print magazines: clean layouts, no pop-ups, no
+                autoplay. Just the story, the way it was meant to be read.
               </p>
             </div>
           </motion.div>
@@ -41,13 +44,13 @@ export function FeatureBento() {
             transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
             className="relative lg:pt-24"
           >
-            <p className="text-ember uppercase tracking-[0.25em] text-xs mb-10">
-              What's different
-            </p>
+            <p className="text-ember uppercase tracking-[0.25em] text-xs mb-10">What's different</p>
 
             <div className="border-t border-line pt-8">
               <div className="grid grid-cols-2 gap-8 border-b border-line pb-8 mb-10">
-                <p className="font-serif italic text-2xl md:text-3xl text-foreground/60">Other apps</p>
+                <p className="font-serif italic text-2xl md:text-3xl text-foreground/60">
+                  Other apps
+                </p>
                 <p className="font-serif italic text-2xl md:text-3xl text-ember">Lumen</p>
               </div>
 

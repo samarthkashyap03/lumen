@@ -13,12 +13,14 @@ Interested? Tap in and read the full article, clean and distraction-free. Not wo
 ## Features
 
 **Readers**
+
 - Swipe through 3 summary cards per article
 - Tap into the full article in a clean, ad-free reading view
 - Ask the AI questions about any article, or search across all of them
 - Filter by category, browse trending topics
 
 **Writers**
+
 - Submit articles by URL or write directly in the built-in, clean distraction-free editor
 - AI pipeline runs automatically — reads, summarizes, checks, polishes, publishes
 - Analytics dashboard to track views and reads
@@ -29,15 +31,15 @@ Interested? Tap in and read the full article, clean and distraction-free. Not wo
 
 When an article is submitted, it goes through the following pipeline:
 
-| Step | Agent | What it does |
-|------|-------|-------------|
-| 1 | **Chunker** | Splits the article into smaller text chunks for processing |
-| 2 | **Embedding Agent** | Generates vector embeddings using `all-MiniLM-L6-v2` (HuggingFace) and stores them in pgvector for similarity search |
-| 3 | **Analyzer** | Uses Groq LLM to identify themes, tone, and key takeaways — produces a structured blueprint |
-| 4 | **Generator** | Takes the blueprint and generates 3 summary cards with titles, descriptions, and category tags |
-| 5 | **Validator** | Cross-references the generated cards against the original text to catch hallucinations or inaccuracies |
-| 6 | **Optimizer** | Polishes wording, applies markdown formatting, bolds key terms for readability |
-| 7 | **Publisher** | Writes the final article, cards, and chunks to Supabase (PostgreSQL) |
+| Step | Agent               | What it does                                                                                                         |
+| ---- | ------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| 1    | **Chunker**         | Splits the article into smaller text chunks for processing                                                           |
+| 2    | **Embedding Agent** | Generates vector embeddings using `all-MiniLM-L6-v2` (HuggingFace) and stores them in pgvector for similarity search |
+| 3    | **Analyzer**        | Uses Groq LLM to identify themes, tone, and key takeaways — produces a structured blueprint                          |
+| 4    | **Generator**       | Takes the blueprint and generates 3 summary cards with titles, descriptions, and category tags                       |
+| 5    | **Validator**       | Cross-references the generated cards against the original text to catch hallucinations or inaccuracies               |
+| 6    | **Optimizer**       | Polishes wording, applies markdown formatting, bolds key terms for readability                                       |
+| 7    | **Publisher**       | Writes the final article, cards, and chunks to Supabase (PostgreSQL)                                                 |
 
 Agents 3, 4, 5, and 6 are LLM-powered (Groq / Llama). Agents 1, 2, and 7 are standard data processing steps.
 
@@ -48,6 +50,7 @@ The chat feature uses Retrieval-Augmented Generation. When a user asks a questio
 ---
 
 ## Architecture
+
 ```
 Article Submission
         │
@@ -85,13 +88,13 @@ Article Submission
 
 ## Tech Stack
 
-| Layer | Tools |
-|-------|-------|
+| Layer    | Tools                                                    |
+| -------- | -------------------------------------------------------- |
 | Frontend | React, TypeScript, TanStack Router, Tailwind CSS, Motion |
-| Backend | Python, FastAPI, Celery, Redis |
-| AI | Groq (Llama), HuggingFace sentence-transformers |
-| Database | Supabase (PostgreSQL + pgvector) |
-| Hosting | Vercel (frontend), Render (backend) |
+| Backend  | Python, FastAPI, Celery, Redis                           |
+| AI       | Groq (Llama), HuggingFace sentence-transformers          |
+| Database | Supabase (PostgreSQL + pgvector)                         |
+| Hosting  | Vercel (frontend), Render (backend)                      |
 
 ---
 
@@ -118,6 +121,7 @@ lumen-saas/
 ## Running Locally
 
 ### You'll need
+
 - Node.js 18+
 - Python 3.10+
 - A [Groq API key](https://console.groq.com/keys) (free tier works)
@@ -149,19 +153,20 @@ Starts at `http://localhost:3000`.
 
 ## Pages
 
-| Route | Page |
-|-------|------|
-| `/` | Landing page |
-| `/feed` | Article feed with swipeable cards |
-| `/reader/:id` | Full article reader |
-| `/chat` | AI chat |
-| `/features` | Feature showcase |
-| `/about` | Why Lumen exists |
-| `/tech-stack` | How the AI pipeline works |
-| `/cms` | Editor dashboard — submit and manage articles |
-| `/analytics` | Performance stats for editors |
+| Route         | Page                                          |
+| ------------- | --------------------------------------------- |
+| `/`           | Landing page                                  |
+| `/feed`       | Article feed with swipeable cards             |
+| `/reader/:id` | Full article reader                           |
+| `/chat`       | AI chat                                       |
+| `/features`   | Feature showcase                              |
+| `/about`      | Why Lumen exists                              |
+| `/tech-stack` | How the AI pipeline works                     |
+| `/cms`        | Editor dashboard — submit and manage articles |
+| `/analytics`  | Performance stats for editors                 |
 
 ---
+
 ## What I Learnt
 
 - **Multi-agent pipelines** — How multi agent system works and how they communicate with each other.
