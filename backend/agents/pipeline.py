@@ -16,7 +16,7 @@ def run_ingestion_pipeline(url: str, article_id: str) -> bool:
     5. AI Agent 3 (Optimizer): Copywrites and formats cards (using asterisks).
     6. Persistence: Saves results to DB (Supabase or local JSON) and flips status to completed.
     """
-    from main import is_supabase_configured, supabase, load_mock_db, save_mock_db
+    from main import is_supabase_configured, supabase
     
     print(f"[Pipeline] Fetching initial text content for article ID: {article_id}")
     
@@ -25,31 +25,20 @@ def run_ingestion_pipeline(url: str, article_id: str) -> bool:
     extracted_text = ""
     category = "General"
     
-    # 1. Fetch from Supabase if configured
-    if is_supabase_configured():
-        try:
-            res = supabase.table("articles").select("*").eq("id", article_id).execute()
-            if res.data:
-                art = res.data[0]
-                title = art.get("title") or ""
-                author = art.get("author") or "Lumen Editors"
-                extracted_text = art.get("body_text") or ""
-                category = art.get("category") or "General"
-        except Exception as e:
-            print(f"[Pipeline Loader Error] Supabase fetch failed: {e}")
-            
-    # 2. Fetch from Local JSON fallback
-    if not extracted_text:
-        try:
-            db = load_mock_db()
-            art = db["articles"].get(article_id)
-            if art:
-                title = art.get("title") or ""
-                author = art.get("author") or "Lumen Editors"
-                extracted_text = art.get("body_text") or ""
-                category = art.get("category") or "General"
-        except Exception as e:
-            print(f"[Pipeline Loader Error] Local JSON fetch failed: {e}")
+    if not is_supabase_configured():
+        raise Exception("Database is not configured")
+        
+    try:
+        res = supabase.table("articles").select("*").eq("id", article_id).execute()
+        if res.data:
+            art = res.data[0]
+            title = art.get("title") or ""
+            author = art.get("author") or "Lumen Editors"
+            extracted_text = art.get("body_text") or ""
+            category = art.get("category") or "General"
+    except Exception as e:
+        print(f"[Pipeline Loader Error] Supabase fetch failed: {e}")
+        raise e
 
     state = {
         "url": url,
@@ -76,29 +65,15 @@ def run_ingestion_pipeline(url: str, article_id: str) -> bool:
         state.update(scraped)
         
         # Save scraped text back to database so it is persistently available
-        if is_supabase_configured():
-            try:
-                supabase.table("articles").update({
-                    "title": state["title"],
-                    "author": state["author"],
-                    "body_text": state["extracted_text"],
-                    "category": state["category"]
-                }).eq("id", article_id).execute()
-            except Exception as e:
-                print(f"[Pipeline] Database update of scraped article failed: {e}")
-        else:
-            try:
-                db = load_mock_db()
-                if article_id in db["articles"]:
-                    db["articles"][article_id].update({
-                        "title": state["title"],
-                        "author": state["author"],
-                        "body_text": state["extracted_text"],
-                        "category": state["category"]
-                    })
-                    save_mock_db(db)
-            except Exception as e:
-                print(f"[Pipeline] Local DB update of scraped article failed: {e}")
+        try:
+            supabase.table("articles").update({
+                "title": state["title"],
+                "author": state["author"],
+                "body_text": state["extracted_text"],
+                "category": state["category"]
+            }).eq("id", article_id).execute()
+        except Exception as e:
+            print(f"[Pipeline] Database update of scraped article failed: {e}")
 
     if not state.get("extracted_text"):
         print("[Pipeline Error] No body text extracted. Aborting.")
@@ -165,39 +140,20 @@ def run_ingestion_pipeline(url: str, article_id: str) -> bool:
 
 def update_article_status(article_id: str, status: str):
     """Fallback helper to update status if any segment of the pipeline crashes."""
-    from main import is_supabase_configured, supabase, load_mock_db, save_mock_db
-    if is_supabase_configured():
-        try:
-            supabase.table("articles").update({"status": status}).eq("id", article_id).execute()
-        except Exception:
-            pass
-    else:
-        try:
-            db = load_mock_db()
-            if article_id in db["articles"]:
-                db["articles"][article_id]["status"] = status
-                save_mock_db(db)
-        except Exception:
-            pass
+    from main import supabase
+    try:
+        supabase.table("articles").update({"status": status}).eq("id", article_id).execute()
+    except Exception:
+        pass
 
 def update_article_error(article_id: str, err_msg: str):
     """Helper to update status to failed and set the title to show the exact error message."""
-    from main import is_supabase_configured, supabase, load_mock_db, save_mock_db
+    from main import supabase
     clean_err = f"Pipeline Error: {err_msg}"
-    if is_supabase_configured():
-        try:
-            supabase.table("articles").update({
-                "status": "failed",
-                "title": clean_err[:120]
-            }).eq("id", article_id).execute()
-        except Exception:
-            pass
-    else:
-        try:
-            db = load_mock_db()
-            if article_id in db["articles"]:
-                db["articles"][article_id]["status"] = "failed"
-                db["articles"][article_id]["title"] = clean_err[:120]
-                save_mock_db(db)
-        except Exception:
-            pass
+    try:
+        supabase.table("articles").update({
+            "status": "failed",
+            "title": clean_err[:120]
+        }).eq("id", article_id).execute()
+    except Exception:
+        pass

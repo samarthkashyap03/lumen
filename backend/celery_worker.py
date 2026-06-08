@@ -1,5 +1,13 @@
 import os
+import sys
+
+# Ensure the backend directory is in the python path for workers and tasks
+backend_dir = os.path.dirname(os.path.abspath(__file__))
+if backend_dir not in sys.path:
+    sys.path.insert(0, backend_dir)
+
 from celery import Celery
+
 
 # Load environment variables from .env if present
 env_path = os.path.join(os.path.dirname(__file__), ".env")
@@ -56,7 +64,7 @@ def process_article_pipeline(url: str, article_id: str):
         
         # Mark article as failed in database (Supabase or local JSON)
         try:
-            from main import is_supabase_configured, supabase, load_mock_db, save_mock_db
+            from main import is_supabase_configured, supabase
             err_msg = f"Processing Error: {str(e)}"
             if is_supabase_configured():
                 supabase.table("articles").update({
@@ -64,11 +72,7 @@ def process_article_pipeline(url: str, article_id: str):
                     "title": err_msg[:120]
                 }).eq("id", article_id).execute()
             else:
-                db = load_mock_db()
-                if article_id in db["articles"]:
-                    db["articles"][article_id]["status"] = "failed"
-                    db["articles"][article_id]["title"] = err_msg[:120]
-                    save_mock_db(db)
+                print("Supabase not configured, cannot update failure state.")
         except Exception as db_err:
             print(f"Failed to update database failure state: {db_err}")
             
