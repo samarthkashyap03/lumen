@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600&display=swap");
+@import "tailwindcss" source(none);
+@import "tw-animate-css";
+@source "../src";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ember: var(--ember);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-line: var(--line);
+  --font-display: "Work Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", "Times New Roman", serif;
+}
+
+:root {
+  --radius: 0.5rem;
+
+  /* Charcoal & Ember — warm editorial dark */
+  --ink: oklch(0.16 0.005 60);          /* #0e0d0c bg */
+  --paper: oklch(0.96 0.012 85);        /* #f5f1e8 type */
+  --ember: oklch(0.66 0.18 38);         /* #e85d3a accent */
+  --line: oklch(0.27 0.008 50);         /* #2d2826 hairline */
+
+  --background: var(--ink);
+  --foreground: var(--paper);
+  --card: oklch(0.20 0.006 55);         /* #1a1816 */
+  --card-foreground: var(--paper);
+  --popover: oklch(0.20 0.006 55);
+  --popover-foreground: var(--paper);
+  --primary: var(--ember);
+  --primary-foreground: var(--ink);
+  --secondary: oklch(0.24 0.007 55);
+  --secondary-foreground: var(--paper);
+  --muted: oklch(0.22 0.006 55);
+  --muted-foreground: oklch(0.66 0.012 60);
+  --accent: var(--ember);
+  --accent-foreground: var(--ink);
+  --destructive: oklch(0.62 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: var(--line);
+  --input: oklch(1 0 0 / 12%);
+  --ring: var(--ember);
+}
+
+.dark {
+  --background: var(--ink);
+  --foreground: var(--paper);
+  --card: oklch(0.20 0.006 55);
+  --card-foreground: var(--paper);
+  --popover: oklch(0.20 0.006 55);
+  --popover-foreground: var(--paper);
+  --primary: var(--ember);
+  --primary-foreground: var(--ink);
+  --secondary: oklch(0.24 0.007 55);
+  --secondary-foreground: var(--paper);
+  --muted: oklch(0.22 0.006 55);
+  --muted-foreground: oklch(0.66 0.012 60);
+  --accent: var(--ember);
+  --accent-foreground: var(--ink);
+  --border: var(--line);
+  --input: oklch(1 0 0 / 12%);
+  --ring: var(--ember);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    color-scheme: dark;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-display);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--ember);
+    color: var(--ink);
+  }
+}
+
+@utility font-serif {
+  font-family: var(--font-serif);
+}
+
+@utility grain {
+  position: relative;
+}
+@utility grain-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.85'/></svg>");
+}
+
+@utility rule {
+  height: 1px;
+  background-color: var(--line);
+}
