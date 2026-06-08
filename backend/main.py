@@ -8,7 +8,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from supabase import create_client, Client
 from groq import Groq
-from sentence_transformers import SentenceTransformer
 import requests
 
 # Load environment variables from .env if present
@@ -52,6 +51,7 @@ embedding_model = None
 def get_embedding_model():
     global embedding_model
     if embedding_model is None:
+        from sentence_transformers import SentenceTransformer
         embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
     return embedding_model
 
@@ -965,4 +965,5 @@ async def get_analytics_summary():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
