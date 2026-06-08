@@ -24,17 +24,15 @@ export function CtaSection() {
         <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
           <Link
             to="/register"
-            search={{ role: "reader" }}
             className="px-8 py-4 bg-ember text-ink font-medium text-xs tracking-[0.2em] uppercase hover:bg-paper transition-colors duration-500"
           >
-            Get Started Free
+            Subscribe to Lumen
           </Link>
           <Link
-            to="/register"
-            search={{ role: "editor" }}
+            to="/feed"
             className="px-8 py-4 border border-line text-xs tracking-[0.2em] uppercase hover:bg-card transition-colors duration-500"
           >
-            Contribute as Editor
+            Explore the Feed
           </Link>
         </div>
       </motion.div>

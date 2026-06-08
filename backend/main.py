@@ -56,6 +56,45 @@ def get_embedding_model():
     return embedding_model
 
 
+def safe_uuid(val: Optional[str]) -> Optional[str]:
+    """
+    Validates if the provided value is a valid UUID.
+    Returns the string value if valid, otherwise returns None.
+    This protects Supabase query foreign key fields from failing with bad uuid syntax.
+    """
+    if not val:
+        return None
+    try:
+        uuid.UUID(str(val))
+        return str(val)
+    except ValueError:
+        return None
+
+def dispatch_pipeline(url: str, article_id: str):
+    """
+    Dispatches the multi-agent ingestion pipeline.
+    Checks if a remote REDIS_URL is configured to use Celery delay.
+    If not configured or if delay raises an error, falls back to a background thread.
+    """
+    redis_url = os.getenv("REDIS_URL", "")
+    use_celery = bool(redis_url and "localhost" not in redis_url and "127.0.0.1" not in redis_url)
+    
+    if use_celery:
+        try:
+            from celery_worker import process_article_pipeline
+            process_article_pipeline.delay(url, article_id)
+            print(f"[Pipeline Dispatch] Dispatched via Celery task queue for article {article_id}")
+            return
+        except Exception as e:
+            print(f"[Pipeline Dispatch Warning] Celery dispatch failed: {e}. Falling back to Thread.")
+            
+    # Fallback to local background thread
+    import threading
+    from celery_worker import process_article_pipeline
+    threading.Thread(target=lambda: process_article_pipeline(url, article_id)).start()
+    print(f"[Pipeline Dispatch] Dispatched via background Thread for article {article_id}")
+
+
 # --- Local Fallback Database Helper ---
 
 MOCK_DB_PATH = os.path.join(os.path.dirname(__file__), "mock_db.json")
@@ -163,12 +202,12 @@ class RegisterRequest(BaseModel):
     name: str
     email: str
     password: str
-    role: str
+    role: Optional[str] = "editor"
 
 class LoginRequest(BaseModel):
     email: str
     password: str
-    role: str
+    role: Optional[str] = "editor"
 
 class ArticleCreateRequest(BaseModel):
     title: str
@@ -224,7 +263,7 @@ async def auth_register(req: RegisterRequest):
                     "user_id": res.user.id,
                     "email": req.email,
                     "name": req.name,
-                    "role": req.role,
+                    "role": req.role or "editor",
                     "session_token": res.session.access_token if res.session else f"mock-token-{res.user.id}"
                 }
         except Exception as e:
@@ -241,7 +280,7 @@ async def auth_register(req: RegisterRequest):
         "email": req.email,
         "password": req.password,
         "name": req.name,
-        "role": req.role
+        "role": req.role or "editor"
     }
     db["users"][req.email] = new_user
     db["profiles"][user_id] = {
@@ -269,10 +308,20 @@ async def auth_login(req: LoginRequest):
             })
             if res.user:
                 profile_res = supabase.table("profiles").select("*").eq("id", res.user.id).execute()
-                role = req.role
+                role = req.role or "editor"
                 name = req.email.split("@")[0]
-                if profile_res.data:
-                    role = profile_res.data[0].get("role", "reader")
+                if not profile_res.data:
+                    try:
+                        supabase.table("profiles").insert({
+                            "id": res.user.id,
+                            "name": name,
+                            "role": role
+                        }).execute()
+                        print(f"[Auto-heal] Created missing profile in Supabase on login for user {res.user.id}")
+                    except Exception as pe:
+                        print(f"[Auto-heal Warning] Failed to create missing profile: {pe}")
+                else:
+                    role = profile_res.data[0].get("role", "editor")
                     name = profile_res.data[0].get("name", name)
                 
                 return {
@@ -280,7 +329,7 @@ async def auth_login(req: LoginRequest):
                     "email": req.email,
                     "name": name,
                     "role": role,
-                    "session_token": res.session.access_token
+                    "session_token": res.session.access_token if res.session else f"mock-token-{res.user.id}"
                 }
         except Exception as e:
             print(f"Supabase login failed, falling back: {e}")
@@ -292,7 +341,7 @@ async def auth_login(req: LoginRequest):
         raise HTTPException(status_code=400, detail="Invalid credentials.")
         
     # Enforce role update if toggled differently during mock login
-    if user["role"] != req.role:
+    if req.role and user["role"] != req.role:
         user["role"] = req.role
         if user["id"] in db["profiles"]:
             db["profiles"][user["id"]]["role"] = req.role
@@ -328,9 +377,20 @@ async def auth_session(token: str):
                 profile_res = supabase.table("profiles").select("*").eq("id", res.user.id).execute()
                 role = "reader"
                 name = res.user.email.split("@")[0]
-                if profile_res.data:
+                if not profile_res.data:
+                    try:
+                        supabase.table("profiles").insert({
+                            "id": res.user.id,
+                            "name": name,
+                            "role": role
+                        }).execute()
+                        print(f"[Auto-heal] Created missing profile in Supabase on session validation for user {res.user.id}")
+                    except Exception as pe:
+                        print(f"[Auto-heal Warning] Failed to create missing profile: {pe}")
+                else:
                     role = profile_res.data[0].get("role", "reader")
                     name = profile_res.data[0].get("name", name)
+                
                 return {
                     "user_id": res.user.id,
                     "name": name,
@@ -370,12 +430,11 @@ async def create_article(req: ArticleCreateRequest):
                 "body_text": req.body_text,
                 "category": req.category,
                 "status": "processing",
-                "editor_id": req.editor_id
+                "editor_id": safe_uuid(req.editor_id)
             }).execute()
             
             # Start background pipeline
-            from celery_worker import process_article_pipeline
-            process_article_pipeline.delay(url, article_id)
+            dispatch_pipeline(url, article_id)
             
             return {
                 "message": "Article saved and pipeline queued.",
@@ -433,11 +492,10 @@ async def ingest_url(request: IngestRequest):
                 "status": "processing",
                 "title": "Ingesting text...",
                 "category": "General",
-                "editor_id": request.editor_id
+                "editor_id": safe_uuid(request.editor_id)
             }).execute()
             
-            from celery_worker import process_article_pipeline
-            process_article_pipeline.delay(request.url, article_id)
+            dispatch_pipeline(request.url, article_id)
             return {
                 "message": "Ingestion pipeline queued successfully.",
                 "article_id": article_id,
@@ -638,8 +696,7 @@ async def update_article(article_id: str, req: ArticleCreateRequest):
             }).eq("id", article_id).execute()
             
             # Start pipeline background worker to re-generate everything!
-            from celery_worker import process_article_pipeline
-            process_article_pipeline.delay(url, article_id)
+            dispatch_pipeline(url, article_id)
             return {"status": "processing", "article_id": article_id, "message": "Article updated, pipeline queued."}
         except Exception as e:
             print(f"Failed to update article in Supabase: {e}")
@@ -869,12 +926,21 @@ async def log_event(request: EventRequest):
         "metadata": request.metadata,
         "created_at": datetime.utcnow().isoformat()
     }
+
     if is_supabase_configured():
         try:
-            supabase.table("analytics_events").insert(event_data).execute()
-            return {"status": "logged"}
+            supabase_event = {
+                "id": event_data["id"],
+                "user_id": safe_uuid(event_data["user_id"]),
+                "article_id": safe_uuid(event_data["article_id"]),
+                "event_type": event_data["event_type"],
+                "metadata": event_data["metadata"],
+                "timestamp": event_data["created_at"]
+            }
+            supabase.table("analytics_events").insert(supabase_event).execute()
         except Exception as e:
             print(f"Analytics logging error: {e}")
+
     # Always persist to mock_db as fallback/local store
     db = load_mock_db()
     db.setdefault("events", []).append(event_data)
@@ -884,23 +950,25 @@ async def log_event(request: EventRequest):
 @app.get("/api/analytics/summary")
 async def get_analytics_summary():
     DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-
     if is_supabase_configured():
         try:
             articles_res = supabase.table("articles").select("category, status").execute()
             articles = articles_res.data or []
             profiles_res = supabase.table("profiles").select("id").execute()
             total_users = len(profiles_res.data or [])
-            events_res = supabase.table("analytics_events").select("event_type, metadata, created_at").execute()
+            events_res = supabase.table("analytics_events").select("*").execute()
             events = events_res.data or []
-        except Exception:
-            articles, events, total_users = [], [], 0
+        except Exception as e:
+            print(f"Supabase analytics fetch failed, falling back to mock DB: {e}")
+            db = load_mock_db()
+            articles = list(db.get("articles", {}).values())
+            total_users = len(db.get("users", {}))
+            events = db.get("events", [])
     else:
         db = load_mock_db()
         articles = list(db.get("articles", {}).values())
         total_users = len(db.get("users", {}))
         events = db.get("events", [])
-
     # --- Article counts ---
     completed = [a for a in articles if a.get("status") == "completed"]
     total_articles = len(completed)
@@ -922,7 +990,7 @@ async def get_analytics_summary():
     day_reads = {d: 0 for d in DAYS}
     for e in events:
         try:
-            ts = e.get("created_at", "")
+            ts = e.get("created_at") or e.get("timestamp") or ""
             if ts:
                 from datetime import timezone
                 dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))

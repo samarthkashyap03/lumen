@@ -224,7 +224,6 @@ function FeedPage() {
                 or{" "}
                 <Link
                   to="/register"
-                  search={{ role: "reader" }}
                   className="text-ember underline underline-offset-2 font-semibold hover:text-paper transition-colors"
                 >
                   create an account
@@ -331,7 +330,6 @@ function FeedPage() {
                   <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
                     <Link
                       to="/register"
-                      search={{ role: "reader" }}
                       className="px-8 py-4 bg-ember text-ink font-semibold text-xs tracking-[0.2em] uppercase hover:bg-paper transition-all cursor-pointer"
                     >
                       Create Free Account

@@ -352,7 +352,6 @@ function ReaderPage() {
             <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
               <Link
                 to="/register"
-                search={{ role: "reader" }}
                 className="px-8 py-4 bg-ember text-ink font-semibold text-xs tracking-[0.2em] uppercase hover:bg-paper transition-all cursor-pointer animate-none"
               >
                 Create Free Account

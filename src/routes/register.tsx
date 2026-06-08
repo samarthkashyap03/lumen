@@ -1,16 +1,14 @@
-import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Navbar } from "@/components/landing/Navbar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { auth, UserRole } from "@/lib/auth";
+import { useState, useMemo } from "react";
+import { auth } from "@/lib/auth";
 import { toast } from "sonner";
 import { API_URL } from "@/lib/config";
+import { Eye, EyeOff } from "lucide-react";
 
 export const Route = createFileRoute("/register")({
-  validateSearch: (search: Record<string, unknown>): { role?: UserRole } => ({
-    role: (search.role as UserRole) ?? "reader",
-  }),
   head: () => ({
     meta: [
       { title: "Register — Lumen" },
@@ -20,19 +18,49 @@ export const Route = createFileRoute("/register")({
   component: Register,
 });
 
+// Password rules
+const rules = [
+  { label: "At least 8 characters", test: (p: string) => p.length >= 8 },
+  { label: "Uppercase letter", test: (p: string) => /[A-Z]/.test(p) },
+  { label: "Lowercase letter", test: (p: string) => /[a-z]/.test(p) },
+  { label: "Number", test: (p: string) => /[0-9]/.test(p) },
+  { label: "Special character (!@#$…)", test: (p: string) => /[^A-Za-z0-9]/.test(p) },
+];
+
 function Register() {
-  const { role: initialRole } = useSearch({ from: "/register" });
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<UserRole>(initialRole ?? "reader");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [touched, setTouched] = useState(false);
   const navigate = useNavigate();
+
+  const passed = useMemo(() => rules.map((r) => r.test(password)), [password]);
+  const strength = passed.filter(Boolean).length; // 0–5
+  const allPassed = strength === rules.length;
+
+  const strengthLabel = ["", "Weak", "Fair", "Good", "Strong", "Excellent"][strength];
+  const strengthColor = [
+    "",
+    "bg-red-500",
+    "bg-orange-400",
+    "bg-yellow-400",
+    "bg-lime-400",
+    "bg-emerald-500",
+  ][strength];
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setTouched(true);
+
     if (!name || !email || !password) {
       toast.error("Please fill in all required fields.");
+      return;
+    }
+
+    if (!allPassed) {
+      toast.error("Password does not meet the requirements.");
       return;
     }
 
@@ -40,10 +68,8 @@ function Register() {
     try {
       const response = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, password, role }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password, role: "editor" }),
       });
 
       if (!response.ok) {
@@ -53,7 +79,6 @@ function Register() {
 
       const data = await response.json();
       auth.setSession(data.session_token, data.user_id, data.name, data.role);
-
       toast.success(`Welcome to Lumen, ${data.name}! Account created.`);
 
       if (data.role === "editor") {
@@ -85,46 +110,13 @@ function Register() {
           </p>
 
           <form className="mt-8 space-y-5" onSubmit={handleRegister}>
-            {/* Role Selection */}
+            {/* Name */}
             <div className="space-y-2">
-              <Label className="text-[10px] uppercase tracking-[0.25em] text-foreground/60 block">
-                Registering As
-              </Label>
-              <div className="grid grid-cols-2 gap-3 border border-line p-1 rounded bg-ink/50">
-                <button
-                  type="button"
-                  onClick={() => setRole("reader")}
-                  className={`py-2 text-[10px] uppercase tracking-[0.15em] font-medium transition-all ${
-                    role === "reader"
-                      ? "bg-ember text-ink font-semibold"
-                      : "text-foreground/60 hover:text-foreground hover:bg-card/20"
-                  }`}
-                >
-                  Reader
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRole("editor")}
-                  className={`py-2 text-[10px] uppercase tracking-[0.15em] font-medium transition-all ${
-                    role === "editor"
-                      ? "bg-ember text-ink font-semibold"
-                      : "text-foreground/60 hover:text-foreground hover:bg-card/20"
-                  }`}
-                >
-                  Editor
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label
-                htmlFor="name"
-                className="text-[10px] uppercase tracking-[0.25em] text-foreground/60"
-              >
+              <Label htmlFor="reg-name" className="text-[10px] uppercase tracking-[0.25em] text-foreground/60">
                 Name
               </Label>
               <Input
-                id="name"
+                id="reg-name"
                 placeholder="Your name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -133,15 +125,13 @@ function Register() {
               />
             </div>
 
+            {/* Email */}
             <div className="space-y-2">
-              <Label
-                htmlFor="email"
-                className="text-[10px] uppercase tracking-[0.25em] text-foreground/60"
-              >
+              <Label htmlFor="reg-email" className="text-[10px] uppercase tracking-[0.25em] text-foreground/60">
                 Email
               </Label>
               <Input
-                id="email"
+                id="reg-email"
                 type="email"
                 placeholder="you@lumen.app"
                 value={email}
@@ -151,27 +141,72 @@ function Register() {
               />
             </div>
 
+            {/* Password with toggle */}
             <div className="space-y-2">
-              <Label
-                htmlFor="password"
-                className="text-[10px] uppercase tracking-[0.25em] text-foreground/60"
-              >
+              <Label htmlFor="reg-password" className="text-[10px] uppercase tracking-[0.25em] text-foreground/60">
                 Password
               </Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="bg-transparent border-0 border-b border-line rounded-none px-0 focus-visible:ring-0 focus-visible:border-ember text-foreground"
-                disabled={loading}
-              />
+              <div className="relative">
+                <Input
+                  id="reg-password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => { setPassword(e.target.value); setTouched(true); }}
+                  className="bg-transparent border-0 border-b border-line rounded-none px-0 pr-8 focus-visible:ring-0 focus-visible:border-ember text-foreground"
+                  disabled={loading}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-foreground/40 hover:text-ember transition-colors p-1"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+
+              {/* Strength bar */}
+              {touched && password.length > 0 && (
+                <div className="mt-3 space-y-2">
+                  <div className="flex gap-1">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className={`h-1 flex-1 rounded-full transition-all duration-300 ${
+                          i < strength ? strengthColor : "bg-line"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  {strengthLabel && (
+                    <p className={`text-[10px] uppercase tracking-[0.15em] font-medium transition-colors ${
+                      strength <= 2 ? "text-red-400" : strength === 3 ? "text-yellow-400" : "text-emerald-400"
+                    }`}>
+                      {strengthLabel}
+                    </p>
+                  )}
+
+                  {/* Rule checklist */}
+                  <ul className="mt-2 space-y-1">
+                    {rules.map((rule, i) => (
+                      <li key={rule.label} className="flex items-center gap-2">
+                        <span className={`text-[10px] transition-colors ${passed[i] ? "text-emerald-400" : "text-foreground/30"}`}>
+                          {passed[i] ? "✓" : "○"}
+                        </span>
+                        <span className={`text-[10px] tracking-wide transition-colors ${passed[i] ? "text-foreground/60" : "text-foreground/30"}`}>
+                          {rule.label}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full px-8 py-4 bg-ember text-ink text-xs tracking-[0.2em] uppercase font-semibold hover:bg-paper active:scale-[0.98] transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2"
+              disabled={loading || (touched && !allPassed)}
+              className="w-full px-8 py-4 bg-ember text-ink text-xs tracking-[0.2em] uppercase font-semibold hover:bg-paper active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? "Creating account..." : "Create account"}
             </button>
