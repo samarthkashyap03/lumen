@@ -1,4 +1,6 @@
 {
+  "buildCommand": "npm run build && mv dist/client dist_vercel",
+  "outputDirectory": "dist_vercel",
   "cleanUrls": true,
   "rewrites": [
     {
