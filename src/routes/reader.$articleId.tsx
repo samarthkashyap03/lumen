@@ -692,8 +692,8 @@ function ReaderPage() {
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.4}
               onDragEnd={(e, info) => {
-                if (info.offset.x < -60) handlePrevCard();
-                else if (info.offset.x > 60) handleNextCard();
+                if (info.offset.x < -60) handleNextCard();
+                else if (info.offset.x > 60) handlePrevCard();
               }}
             >
               <AnimatePresence mode="wait">
