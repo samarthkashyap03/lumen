@@ -151,21 +151,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lumen — Journalism, recomposed." },
+      { title: "Lumen by Samarth Kashyap — Journalism, recomposed." },
       {
         name: "description",
         content:
-          "An editorial reading sanctuary. AI distils the noise so you can settle into the story. Designed for depth, built for the curious.",
+          "An editorial reading sanctuary by Samarth Kashyap. AI distils the noise so you can settle into the story. Designed for depth, built for the curious.",
       },
-      { name: "author", content: "Lumen" },
-      { property: "og:title", content: "Lumen — Journalism, recomposed." },
+      { name: "author", content: "Samarth Kashyap" },
+      { property: "og:title", content: "Lumen by Samarth Kashyap — Journalism, recomposed." },
       {
         property: "og:description",
-        content: "An editorial reading sanctuary for the curious mind.",
+        content: "An editorial reading sanctuary for the curious mind, built by Samarth Kashyap.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Lumen — Journalism, recomposed." },
+      { name: "twitter:title", content: "Lumen by Samarth Kashyap — Journalism, recomposed." },
       {
         name: "twitter:description",
         content: "An editorial reading sanctuary for the curious mind.",
@@ -180,6 +180,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "preconnect",
         href: "https://fonts.gstatic.com",
         crossOrigin: "anonymous",
+      },
+      {
+        rel: "icon",
+        type: "image/x-icon",
+        href: "/favicon.ico",
       },
       {
         rel: "stylesheet",

@@ -12,7 +12,8 @@ export function Footer() {
               <span className="text-[10px] uppercase tracking-[0.3em] text-ember">N°01</span>
             </Link>
             <p className="mt-5 max-w-xs text-sm text-foreground/55 leading-relaxed">
-              Handpicked journalism, AI-summarised for busy readers. Read smarter, not longer.
+              Handpicked journalism, AI-summarised for busy readers. Built with precision by{" "}
+              <a href="https://github.com/samarthkashyap03" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-ember transition-colors underline decoration-line/40 underline-offset-4">Samarth Kashyap</a>. Read smarter, not longer.
             </p>
             <div className="mt-6 flex items-center gap-4">
               {[Twitter, Github, Linkedin, Instagram].map((Icon, i) => (
@@ -94,7 +95,7 @@ export function Footer() {
             © {new Date().getFullYear()} Lumen. All rights reserved.
           </div>
           <div className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 font-serif italic">
-            Made for readers who care.
+            Made for readers who care, by <a href="https://www.linkedin.com/in/samarthkashyap/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors" title="Developer Samarth Kashyap">Samarth Kashyap</a>.
           </div>
         </div>
       </div>
