@@ -301,8 +301,8 @@ function CmsWorkPage() {
                         </span>
                       </div>
 
-                      {/* Right side Actions — fixed-width, always aligned */}
-                      <div className="flex gap-3 shrink-0 self-center ml-auto">
+                      {/* Right side Actions — responsive wrap */}
+                      <div className="flex flex-wrap gap-2 md:gap-3 shrink-0 md:self-center md:ml-auto w-full md:w-auto pt-4 md:pt-0 border-t border-line/50 md:border-t-0 mt-2 md:mt-0">
                         <Link
                           to="/reader/$articleId"
                           params={{ articleId: art.id }}
