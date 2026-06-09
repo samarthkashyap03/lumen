@@ -138,10 +138,18 @@ function CmsPage() {
       })
       .then((data) => {
         setJobs(data);
-        // Check if there is any active processing job to animate
-        const processingJob = data.find((job: IngestionJob) => job.status === "processing");
-        if (processingJob && !activeJobId) {
-          setActiveJobId(processingJob.id);
+        if (activeJobId) {
+          // Check if the current active job is still processing
+          const stillProcessing = data.find((job: IngestionJob) => job.id === activeJobId && job.status === "processing");
+          if (!stillProcessing) {
+            setActiveJobId(null);
+          }
+        } else {
+          // Check if there is any active processing job to animate
+          const processingJob = data.find((job: IngestionJob) => job.status === "processing");
+          if (processingJob) {
+            setActiveJobId(processingJob.id);
+          }
         }
       })
       .catch(() => {
@@ -174,8 +182,6 @@ function CmsPage() {
         setActiveStep((step) => {
           if (step >= AGENT_STEPS.length - 1) {
             clearInterval(interval);
-            setActiveJobId(null);
-            fetchQueue();
             return AGENT_STEPS.length - 1;
           }
           return step + 1;

@@ -523,13 +523,38 @@ async def send_chat_message(request: ChatMessageRequest):
             try:
                 model = get_embedding_model()
                 query_vector = model.encode(query).tolist()
+                
                 if request.article_id:
-                    rpc_res = supabase.rpc("match_chunks", {
-                        "query_embedding": query_vector,
-                        "match_threshold": 0.2,
-                        "match_count": 5
-                    }).execute()
-                    context_chunks = [c for c in rpc_res.data if c.get("article_id") == request.article_id]
+                    # 1. Try RPC first
+                    try:
+                        rpc_res = supabase.rpc("match_chunks", {
+                            "query_embedding": query_vector,
+                            "match_threshold": 0.2,
+                            "match_count": 5
+                        }).execute()
+                        context_chunks = [c for c in rpc_res.data if c.get("article_id") == request.article_id]
+                        
+                        if not context_chunks:
+                            raise Exception("RPC returned no chunks for this article")
+                    except Exception as e:
+                        print(f"Fallback to local RAG for article {request.article_id}. Reason: {e}")
+                        chunk_res = supabase.table("article_chunks").select("content_text, embedding").eq("article_id", request.article_id).execute()
+                        if chunk_res.data:
+                            import numpy as np
+                            from numpy.linalg import norm
+                            q_vec = np.array(query_vector)
+                            scored_chunks = []
+                            for c in chunk_res.data:
+                                if "embedding" in c and c["embedding"]:
+                                    emb_val = c["embedding"]
+                                    if isinstance(emb_val, str):
+                                        import json
+                                        emb_val = json.loads(emb_val)
+                                    c_emb = np.array(emb_val)
+                                    score = np.dot(q_vec, c_emb) / (norm(q_vec) * norm(c_emb))
+                                    scored_chunks.append((score, c))
+                            scored_chunks.sort(key=lambda x: x[0], reverse=True)
+                            context_chunks = [c[1] for c in scored_chunks[:5]]
                 else:
                     rpc_res = supabase.rpc("match_chunks", {
                         "query_embedding": query_vector,
