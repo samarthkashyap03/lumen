@@ -453,8 +453,8 @@ function ReaderPage() {
             {/* Conditional Layout based on Toggle Switch */}
             {!showOriginal ? (
               /* Centered Immersive Swipe Cards Mode */
-              <div className="max-w-lg mx-auto w-full select-none">
-                <div className="bg-card/10 border border-line p-8 rounded-lg">
+              <div className="max-w-2xl mx-auto w-full select-none">
+                <div className="bg-card/10 border border-line p-8 md:p-12 rounded-2xl">
                   <div className="flex justify-between items-center border-b border-line pb-4 mb-8">
                     <span className="text-[10px] uppercase tracking-[0.3em] text-ember font-semibold">
                       Lumen dispatches
@@ -476,7 +476,7 @@ function ReaderPage() {
                         handlePrevCard();
                       }
                     }}
-                    className="cursor-ew-resize relative h-[440px] w-full bg-ink border border-line rounded-xl overflow-hidden shadow-2xl mb-6 group transition-all hover:border-ember/20"
+                    className="cursor-ew-resize relative h-[560px] md:h-[640px] w-full bg-ink border border-line rounded-xl overflow-hidden shadow-2xl mb-8 group transition-all hover:border-ember/20"
                   >
                     <AnimatePresence mode="wait">
                       {activeCard && (
@@ -502,10 +502,10 @@ function ReaderPage() {
                           </div>
 
                           {/* Content Bottom Half */}
-                          <div className="p-6 flex flex-col justify-between h-1/2 bg-ink">
+                          <div className="p-8 md:p-10 flex flex-col justify-center h-1/2 bg-ink">
                             <div>
-                              <div className="h-px w-8 bg-ember mb-3" />
-                              <h3 className="font-serif text-lg leading-tight text-foreground mb-3">
+                              <div className="h-[2px] w-12 bg-ember mb-5" />
+                              <h3 className="font-serif text-2xl md:text-3xl leading-tight text-foreground mb-4">
                                 {activeCard.title.split("*").map((t, idx) =>
                                   idx % 2 !== 0 ? (
                                     <em key={idx} className="italic text-ember font-normal">
@@ -516,7 +516,7 @@ function ReaderPage() {
                                   ),
                                 )}
                               </h3>
-                              <p className="text-[11px] leading-relaxed text-foreground/60 font-light">
+                              <p className="text-sm md:text-lg leading-relaxed text-foreground/75 font-light">
                                 {activeCard.summary.split("*").map((t, idx) =>
                                   idx % 2 !== 0 ? (
                                     <em key={idx} className="italic text-ember font-normal">
@@ -582,7 +582,11 @@ function ReaderPage() {
                   {paragraphs.map((p, idx) => (
                     <p
                       key={idx}
-                      className="text-lg md:text-xl text-foreground/75 leading-relaxed font-light first-letter:text-5xl first-letter:font-serif first-letter:float-left first-letter:mr-3 first-letter:text-ember first-letter:leading-none"
+                      className={`text-lg md:text-xl text-foreground/75 leading-relaxed font-light ${
+                        idx === 0
+                          ? "first-letter:text-5xl first-letter:font-serif first-letter:float-left first-letter:mr-3 first-letter:text-ember first-letter:leading-none"
+                          : ""
+                      }`}
                     >
                       {p.split("**").map((text, i) => {
                         const isBold = i % 2 !== 0;
