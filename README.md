@@ -2,11 +2,25 @@
 
 **Read smarter, not longer.**
 
+**Live Demo:** [https://lumenbrief.vercel.app](https://lumenbrief.vercel.app)
+
 I built Lumen because reading anything online had become painful. You click on an article and before you even get to the first sentence, there's a cookie banner, a newsletter popup, an autoplay video, and ads squeezed between every other paragraph. The content itself might be great, but good luck actually focusing on it.
 
 Lumen fixes that. Submit any article link, and a pipeline of AI agents pulls out the 3 key takeaways as swipeable cards. Same format Instagram and TikTok proved keeps people engaged — except here it's used for actually learning something.
 
 Interested? Tap in and read the full article, clean and distraction-free. Not worth it? You lost 90 seconds. For writers, just submit your piece — the AI handles summaries, formatting, and publishing.
+
+---
+
+## Screenshots
+
+| Landing Page | Article Feed |
+| ------------ | ------------ |
+| ![Landing Page](public/screenshots/landing.png) | ![Article Feed](public/screenshots/feed.png) |
+
+| RAG Chat | Reader View |
+| -------- | ----------- |
+| ![RAG Chat](public/screenshots/chat.png) | ![Reader View](public/screenshots/reader.png) |
 
 ---
 
