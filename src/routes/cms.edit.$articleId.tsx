@@ -162,13 +162,16 @@ function CmsEditPage() {
         }),
       });
 
-      if (!response.ok) throw new Error();
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.detail || "Failed to update dispatch.");
+      }
 
       toast.success("Dispatch updated successfully! Re-generation started.");
       // Redirect to main CMS desk so they can watch the live 3-Agent steps run visualization!
       navigate({ to: "/cms" });
-    } catch {
-      toast.error("Failed to update dispatch. Ensure backend server is running.");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update dispatch. Ensure backend server is running.");
     } finally {
       setSubmitting(false);
     }

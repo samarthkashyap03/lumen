@@ -236,12 +236,15 @@ function CmsNewPage() {
         }),
       });
 
-      if (!response.ok) throw new Error();
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.detail || "Failed to submit dispatch.");
+      }
 
       toast.success("Dispatch submitted successfully! Ingestion queued.");
       navigate({ to: "/cms" });
-    } catch {
-      toast.error("Failed to submit dispatch. Ensure backend server is running.");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to submit dispatch. Ensure backend server is running.");
     } finally {
       setSubmitting(false);
     }

@@ -11,9 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TrendingRouteImport } from './routes/trending'
 import { Route as TechStackRouteImport } from './routes/tech-stack'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as OauthCallbackRouteImport } from './routes/oauth-callback'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FeedRouteImport } from './routes/feed'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as CmsRouteImport } from './routes/cms'
@@ -37,6 +40,11 @@ const TechStackRoute = TechStackRouteImport.update({
   path: '/tech-stack',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -47,9 +55,19 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OauthCallbackRoute = OauthCallbackRouteImport.update({
+  id: '/oauth-callback',
+  path: '/oauth-callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeedRoute = FeedRouteImport.update({
@@ -122,9 +140,12 @@ export interface FileRoutesByFullPath {
   '/cms': typeof CmsRouteWithChildren
   '/features': typeof FeaturesRoute
   '/feed': typeof FeedRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/oauth-callback': typeof OauthCallbackRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/tech-stack': typeof TechStackRoute
   '/trending': typeof TrendingRoute
   '/cms/new': typeof CmsNewRoute
@@ -141,9 +162,12 @@ export interface FileRoutesByTo {
   '/cms': typeof CmsRouteWithChildren
   '/features': typeof FeaturesRoute
   '/feed': typeof FeedRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/oauth-callback': typeof OauthCallbackRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/tech-stack': typeof TechStackRoute
   '/trending': typeof TrendingRoute
   '/cms/new': typeof CmsNewRoute
@@ -161,9 +185,12 @@ export interface FileRoutesById {
   '/cms': typeof CmsRouteWithChildren
   '/features': typeof FeaturesRoute
   '/feed': typeof FeedRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/oauth-callback': typeof OauthCallbackRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/tech-stack': typeof TechStackRoute
   '/trending': typeof TrendingRoute
   '/cms/new': typeof CmsNewRoute
@@ -182,9 +209,12 @@ export interface FileRouteTypes {
     | '/cms'
     | '/features'
     | '/feed'
+    | '/forgot-password'
     | '/login'
+    | '/oauth-callback'
     | '/privacy'
     | '/register'
+    | '/reset-password'
     | '/tech-stack'
     | '/trending'
     | '/cms/new'
@@ -201,9 +231,12 @@ export interface FileRouteTypes {
     | '/cms'
     | '/features'
     | '/feed'
+    | '/forgot-password'
     | '/login'
+    | '/oauth-callback'
     | '/privacy'
     | '/register'
+    | '/reset-password'
     | '/tech-stack'
     | '/trending'
     | '/cms/new'
@@ -220,9 +253,12 @@ export interface FileRouteTypes {
     | '/cms'
     | '/features'
     | '/feed'
+    | '/forgot-password'
     | '/login'
+    | '/oauth-callback'
     | '/privacy'
     | '/register'
+    | '/reset-password'
     | '/tech-stack'
     | '/trending'
     | '/cms/new'
@@ -240,9 +276,12 @@ export interface RootRouteChildren {
   CmsRoute: typeof CmsRouteWithChildren
   FeaturesRoute: typeof FeaturesRoute
   FeedRoute: typeof FeedRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
+  OauthCallbackRoute: typeof OauthCallbackRoute
   PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   TechStackRoute: typeof TechStackRoute
   TrendingRoute: typeof TrendingRoute
   ReaderArticleIdRoute: typeof ReaderArticleIdRoute
@@ -264,6 +303,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TechStackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -278,11 +324,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/oauth-callback': {
+      id: '/oauth-callback'
+      path: '/oauth-callback'
+      fullPath: '/oauth-callback'
+      preLoaderRoute: typeof OauthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/feed': {
@@ -395,9 +455,12 @@ const rootRouteChildren: RootRouteChildren = {
   CmsRoute: CmsRouteWithChildren,
   FeaturesRoute: FeaturesRoute,
   FeedRoute: FeedRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
+  OauthCallbackRoute: OauthCallbackRoute,
   PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   TechStackRoute: TechStackRoute,
   TrendingRoute: TrendingRoute,
   ReaderArticleIdRoute: ReaderArticleIdRoute,

@@ -130,12 +130,20 @@ function Login() {
             </div>
 
             <div className="space-y-2">
-              <Label
-                htmlFor="password"
-                className="text-[10px] uppercase tracking-[0.25em] text-foreground/60"
-              >
-                Password
-              </Label>
+              <div className="flex justify-between items-center">
+                <Label
+                  htmlFor="password"
+                  className="text-[10px] uppercase tracking-[0.25em] text-foreground/60"
+                >
+                  Password
+                </Label>
+                <Link
+                  to="/forgot-password"
+                  className="text-[10px] uppercase tracking-[0.15em] text-ember hover:underline"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
               <div className="relative">
                 <Input
                   id="password"
@@ -156,13 +164,34 @@ function Login() {
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full px-8 py-4 bg-ember text-ink text-xs tracking-[0.2em] uppercase font-semibold hover:bg-paper active:scale-[0.98] transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2"
-            >
-              {loading ? "Authenticating..." : "Sign in"}
-            </button>
+            <div className="space-y-4 pt-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full px-8 py-4 bg-ember text-ink text-xs tracking-[0.2em] uppercase font-semibold hover:bg-paper active:scale-[0.98] transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                {loading ? "Authenticating..." : "Sign in"}
+              </button>
+
+              <div className="relative py-2">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-line" />
+                </div>
+                <div className="relative flex justify-center text-[9px] uppercase tracking-[0.2em]">
+                  <span className="bg-background px-3 text-foreground/40">Or</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  window.location.href = `${API_URL}/api/auth/login/google?redirect_to=${window.location.origin}`;
+                }}
+                className="w-full px-8 py-4 border border-line text-foreground hover:bg-card/45 text-xs tracking-[0.2em] uppercase font-semibold flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer"
+              >
+                Continue with Google
+              </button>
+            </div>
           </form>
 
           <p className="mt-8 text-center text-sm text-foreground/50 font-light">

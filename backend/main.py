@@ -1,6 +1,7 @@
 import os
 import json
 import uuid
+import re
 from typing import List, Optional
 from datetime import datetime
 from fastapi import FastAPI, HTTPException, Depends
@@ -101,6 +102,72 @@ def is_supabase_configured():
     return SUPABASE_URL != "https://your-supabase-url.supabase.co" and SUPABASE_KEY != "your-supabase-key"
 
 
+def validate_and_moderate_content(title: str, body_text: str):
+    # 1. Length validation: count words and sentences
+    clean_text = body_text.strip()
+    words = clean_text.split()
+    word_count = len(words)
+    
+    sentences = re.split(r'[.!?]+', clean_text)
+    sentences = [s.strip() for s in sentences if s.strip()]
+    sentence_count = len(sentences)
+    
+    if word_count < 100 or sentence_count < 3:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Content violates policy: Article too short. Minimum 100 words and 3 sentences required. (Current: {word_count} words, {sentence_count} sentences)"
+        )
+    
+    # 2. Local abuse / profanity blocklist moderation
+    profanity_patterns = [
+        r"\bshit\b", r"\bfuck\b", r"\bbitch\b", r"\basshole\b", r"\bbastard\b", r"\bcunt\b", 
+        r"\bdick\b", r"\bpussy\b", r"\bslut\b", r"\bwhore\b", r"\bkill yourself\b", r"\bky[s]\b"
+    ]
+    
+    combined_text = (title + " " + body_text).lower()
+    for pattern in profanity_patterns:
+        if re.search(pattern, combined_text):
+            raise HTTPException(
+                status_code=400,
+                detail="Content violates policy: Abusive, profane, or inappropriate language detected."
+            )
+            
+    # 3. LLM Moderation via Groq if available
+    global groq_client
+    if groq_client:
+        try:
+            moderation_prompt = (
+                "Analyze the following article title and body text for policy violations. "
+                "Policy violations include: abusive/offensive language, hate speech, threats of violence, "
+                "harassment, spam, extremely graphic/explicit content, or promotion of illegal acts.\n\n"
+                "Respond with a single JSON object containing 'allowed' (boolean) and 'reason' (string, empty if allowed).\n"
+                "Format: {\"allowed\": true/false, \"reason\": \"reason for rejection\"}\n\n"
+                f"Title: {title}\n"
+                f"Body: {body_text}"
+            )
+            
+            completion = groq_client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[
+                    {"role": "system", "content": "You are a content moderation assistant. You must output valid JSON only."},
+                    {"role": "user", "content": moderation_prompt}
+                ],
+                temperature=0.0,
+                response_format={"type": "json_object"}
+            )
+            result = json.loads(completion.choices[0].message.content)
+            if not result.get("allowed", True):
+                reason = result.get("reason", "Content violates safety policies.")
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Content violates policy: {reason}"
+                )
+        except HTTPException:
+            raise
+        except Exception as e:
+            print(f"[Moderation Warning] Groq moderation failed: {e}")
+
+
 # --- Schemas ---
 
 class RegisterRequest(BaseModel):
@@ -113,6 +180,13 @@ class LoginRequest(BaseModel):
     email: str
     password: str
     role: Optional[str] = "editor"
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    password: str
 
 class ArticleCreateRequest(BaseModel):
     title: str
@@ -258,6 +332,54 @@ async def auth_session(token: str):
     raise HTTPException(status_code=401, detail="Invalid session token.")
 
 
+@app.post("/api/auth/forgot-password")
+async def auth_forgot_password(req: ForgotPasswordRequest):
+    if not is_supabase_configured():
+        raise HTTPException(status_code=500, detail="Database is not configured")
+    try:
+        frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
+        redirect_url = f"{frontend_url.rstrip('/')}/reset-password"
+        supabase.auth.reset_password_for_email(req.email, {
+            "redirect_to": redirect_url
+        })
+        return {"message": "Password reset email sent."}
+    except Exception as e:
+        print(f"Supabase forgot password failed: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/api/auth/reset-password")
+async def auth_reset_password(req: ResetPasswordRequest):
+    if not is_supabase_configured():
+        raise HTTPException(status_code=500, detail="Database is not configured")
+    try:
+        res = supabase.auth.get_user(req.token)
+        if not res or not res.user:
+            raise HTTPException(status_code=401, detail="Invalid or expired reset token.")
+        
+        # Update user password using admin SDK (assumes service role key)
+        supabase.auth.admin.update_user_by_id(res.user.id, {
+            "password": req.password
+        })
+        return {"message": "Password updated successfully."}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Supabase reset password failed: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/api/auth/login/google")
+def auth_login_google(redirect_to: Optional[str] = None):
+    if not is_supabase_configured():
+        raise HTTPException(status_code=500, detail="Database is not configured")
+    from fastapi.responses import RedirectResponse
+    frontend_url = redirect_to or os.getenv("FRONTEND_URL", "http://localhost:5173")
+    callback_url = f"{frontend_url.rstrip('/')}/oauth-callback"
+    oauth_url = f"{SUPABASE_URL.rstrip('/')}/auth/v1/authorize?provider=google&redirect_to={callback_url}"
+    return RedirectResponse(oauth_url)
+
+
 # --- CMS & Article Endpoints ---
 
 @app.get("/api/health")
@@ -273,6 +395,10 @@ def health_check():
 async def create_article(req: ArticleCreateRequest):
     if not is_supabase_configured():
         raise HTTPException(status_code=500, detail="Database is not configured")
+    
+    # Run publishing guardrails: validation and moderation checks
+    validate_and_moderate_content(req.title, req.body_text)
+    
     article_id = str(uuid.uuid4())
     url = f"lumen://dispatches/{article_id}"
     author = req.author or "Lumen Editors"
@@ -442,6 +568,10 @@ async def delete_article(article_id: str):
 async def update_article(article_id: str, req: ArticleCreateRequest):
     if not is_supabase_configured():
         raise HTTPException(status_code=500, detail="Database is not configured")
+        
+    # Run publishing guardrails: validation and moderation checks
+    validate_and_moderate_content(req.title, req.body_text)
+    
     url = f"lumen://dispatches/{article_id}"
     
     try:
@@ -577,6 +707,10 @@ async def send_chat_message(request: ChatMessageRequest):
             "Keep responses to 2-3 short paragraphs. Use bullet points when listing things. "
             "If asked about Lumen's creator, mention that it was built by Samarth Kashyap, "
             "who holds an MSc in Computer Science from RPTU.\n\n"
+            "CRITICAL GUARDRAIL: You are STRICTLY grounded to only answer questions about the provided article snippets, "
+            "the current reading context, or the Lumen platform itself. If the user asks anything off-topic (e.g. general "
+            "coding, recipes, unrelated facts, writing unrelated content, etc.), you MUST politely decline to answer, "
+            "explaining that you are only allowed to answer questions regarding the active article or Lumen.\n\n"
             "Use the following article snippets to answer the user's question:\n\n"
             f"--- CONTEXT ---\n{context_str}\n----------------"
         )
@@ -588,6 +722,9 @@ async def send_chat_message(request: ChatMessageRequest):
             "Your job is to answer questions about how Lumen works — its features, how to get started, and what makes it different. "
             "Use bullet points to keep things clear. Keep your tone warm and conversational, not formal or academic. "
             "Encourage them to sign in or create a free account to read articles and ask questions about them.\n\n"
+            "CRITICAL GUARDRAIL: You must ONLY answer questions about the Lumen platform (its features, creator Samarth Kashyap, "
+            "how to use it, etc.). If the user asks about any other topic, you must politely decline to answer, "
+            "explaining that your sole purpose is to assist with questions about Lumen.\n\n"
             "Here is a summary of what Lumen is and how it works:\n\n"
             f"--- LUMEN INFO ---\n{LUMEN_ABOUT_DOC}\n----------------\n\n"
             "Keep responses to 2-3 short paragraphs."
