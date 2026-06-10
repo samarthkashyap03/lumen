@@ -46,7 +46,7 @@ class GeneratorAgent:
                 f"   - \"card_index\": integer (0, 1, or 2)\n"
                 f"   - \"category\": string (must match the article category: {category})\n"
                 f"   - \"title\": string (a short, highly punchy headline)\n"
-                f"   - \"summary\": string (a sweet and comprehensive summary of this part of the story, written in exactly 2 or 3 complete, well-formed, and elegant sentences. Do not write just a single short line. Ensure it captures specific details and depth, keeping the length around 40-60 words.)\n"
+                f"   - \"summary\": string (a sweet, highly accurate, and direct summary of this part of the story. You must convey all key details accurately without omitting any crucial information. Use simple, everyday words with low cognitive load to ensure absolute readability. Do not dilute the substance with filler language; keep the details precise. Write exactly 2 or 3 complete, well-formed, and elegant sentences, keeping the length around 40-60 words.)\n"
                 f"4. Output must be a valid JSON array of objects. Do not include markdown codeblocks or conversational text."
             )
             

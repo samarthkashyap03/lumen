@@ -30,7 +30,7 @@ class OptimizerAgent:
                 f"Your task is to refine and style the following list of raw summary cards into publication-grade dispatches.\n\n"
                 f"--- RAW CARDS FROM AGENT 2 ---\n{cards_str}\n------------------------------\n\n"
                 f"INSTRUCTIONS:\n"
-                f"1. Refine the title and summary copywriting to be highly sophisticated, elegant, and punchy. Ensure the summaries remain substantial, sweet, and descriptive (around 40-60 words, written in exactly 2 or 3 complete sentences). Avoid making them too short, and do not truncate them into a single line. Ensure all statements are grammatically complete, natural, and never cut off or ended abruptly.\n"
+                f"1. Refine the title and summary copywriting to be highly sophisticated, elegant, and punchy. Ensure the summaries remain sweet, descriptive, and highly accurate without omitting any crucial details (around 40-60 words, written in exactly 2 or 3 complete sentences). Use simple, everyday words to eliminate cognitive load, avoiding any unnecessary complexity or filler language. Ensure all statements are grammatically complete, natural, and never cut off.\n"
                 f"2. Apply Typographic Emphasis: For each card, select exactly one or two key terms in the title and one key term in the summary, and wrap them in single asterisks (e.g. *focus* or *depth*) to format them in italics on the frontend.\n"
                 f"   - Selected terms should represent critical concepts (e.g. *inference*, *grid*, *sanctuary*, *attention*, *silence*).\n"
                 f"3. Return the optimized cards as a valid JSON array of objects, keeping the 'card_index', 'category', 'title', and 'summary' keys intact.\n"

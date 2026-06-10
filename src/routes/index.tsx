@@ -11,16 +11,17 @@ import { Footer } from "@/components/landing/Footer";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Lumen — Journalism, recomposed." },
+      { title: "Lumen by Samarth Kashyap — Journalism, recomposed." },
       {
         name: "description",
         content:
-          "An editorial reading sanctuary. AI distills the noise so you can settle into the story. Designed for depth, built for the curious.",
+          "An editorial reading sanctuary for Lumen Online, created by Samarth Kashyap. AI distills the noise so you can settle into the story. Designed for depth, built for the curious.",
       },
-      { property: "og:title", content: "Lumen — Journalism, recomposed." },
+      { name: "keywords", content: "Lumen, Lumen Online, Samarth Kashyap, journalism, reading sanctuary, minimal reader, AI news digest, portfolio" },
+      { property: "og:title", content: "Lumen by Samarth Kashyap — Journalism, recomposed." },
       {
         property: "og:description",
-        content: "An editorial reading sanctuary for the curious mind.",
+        content: "An editorial reading sanctuary for the curious mind, built by Samarth Kashyap.",
       },
       { property: "og:type", content: "website" },
     ],

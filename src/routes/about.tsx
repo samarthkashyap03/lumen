@@ -7,13 +7,14 @@ import { ArrowRight } from "lucide-react";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Lumen" },
+      { title: "About Lumen Online — Samarth Kashyap" },
       {
         name: "description",
-        content: "What Lumen is, how to read articles, and how to publish as an editor.",
+        content: "What Lumen is, how to read articles, and how to publish as an editor on Lumen Online, built by Samarth Kashyap.",
       },
-      { property: "og:title", content: "About — Lumen" },
-      { property: "og:description", content: "Journalism made readable. Learn how Lumen works." },
+      { name: "keywords", content: "About Lumen, Lumen Online, Samarth Kashyap, creator, portfolio, developer" },
+      { property: "og:title", content: "About Lumen Online — Samarth Kashyap" },
+      { property: "og:description", content: "Journalism made readable. Learn how Lumen works, built by Samarth Kashyap." },
     ],
   }),
   component: About,

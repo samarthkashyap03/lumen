@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { trackEvent } from "@/lib/trackEvent";
 import { auth } from "@/lib/auth";
 import { API_URL } from "@/lib/config";
+import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
 export const Route = createFileRoute("/reader/$articleId")({
   head: () => ({
@@ -581,32 +582,8 @@ function ReaderPage() {
             ) : (
               /* Clean Single-Column Editorial Mode */
               <div className="max-w-3xl mx-auto w-full select-text pb-12 space-y-12 animate-none">
-                <article className="space-y-8">
-                  {paragraphs.map((p, idx) => (
-                    <p
-                      key={idx}
-                      className={`text-lg md:text-xl text-foreground/75 leading-relaxed font-light ${
-                        idx === 0
-                          ? "first-letter:text-5xl first-letter:font-serif first-letter:float-left first-letter:mr-3 first-letter:text-ember first-letter:leading-none"
-                          : ""
-                      }`}
-                    >
-                      {p.split("**").map((text, i) => {
-                        const isBold = i % 2 !== 0;
-                        return text.split("*").map((subText, j) => {
-                          const isItalic = j % 2 !== 0;
-                          if (isBold) return <strong key={`${i}-${j}`}>{subText}</strong>;
-                          if (isItalic)
-                            return (
-                              <em key={`${i}-${j}`} className="italic text-ember">
-                                {subText}
-                              </em>
-                            );
-                          return subText;
-                        });
-                      })}
-                    </p>
-                  ))}
+                <article className="space-y-8 select-text">
+                  <MarkdownRenderer content={article.body_text} isFirstLetterLarge={true} />
                 </article>
 
                 {/* RAG Chat Prompt for Original Text */}
@@ -755,25 +732,8 @@ function ReaderPage() {
               </div>
             </section>
             
-            <article className="space-y-6">
-              {paragraphs.map((p, idx) => (
-                <p
-                  key={idx}
-                  className={`text-lg text-foreground/80 leading-relaxed font-light ${
-                    idx === 0 ? "first-letter:text-5xl first-letter:font-serif first-letter:float-left first-letter:mr-3 first-letter:text-ember first-letter:leading-none" : ""
-                  }`}
-                >
-                  {p.split("**").map((text, i) => {
-                    const isBold = i % 2 !== 0;
-                    return text.split("*").map((subText, j) => {
-                      const isItalic = j % 2 !== 0;
-                      if (isBold) return <strong key={`${i}-${j}`}>{subText}</strong>;
-                      if (isItalic) return <em key={`${i}-${j}`} className="italic text-ember">{subText}</em>;
-                      return subText;
-                    });
-                  })}
-                </p>
-              ))}
+            <article className="space-y-6 select-text">
+              <MarkdownRenderer content={article.body_text} isFirstLetterLarge={true} />
             </article>
 
             {/* Next/Prev Floating Action Buttons */}

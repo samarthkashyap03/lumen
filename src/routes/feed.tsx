@@ -6,6 +6,7 @@ import { Footer } from "@/components/landing/Footer";
 import { ArrowRight, BookOpen, MessageSquare, Search } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { API_URL } from "@/lib/config";
+import { stripMarkdown } from "@/components/MarkdownRenderer";
 
 type FeedSearch = {
   category?: string;
@@ -282,7 +283,7 @@ function FeedPage() {
                       </h3>
 
                       <p className="text-sm md:text-base text-foreground/60 leading-relaxed font-light line-clamp-3 mb-8">
-                        {article.body_text}
+                        {stripMarkdown(article.body_text)}
                       </p>
                     </div>
 
