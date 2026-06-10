@@ -59,20 +59,8 @@ class AnalyzerAgent:
                 "category": category
             }
         except Exception as e:
-            print(f"[Analyzer Scraper Error] Failed to scrape {url}: {e}. Using fallback mock content.")
-            parsed = urllib.parse.urlparse(url)
-            return {
-                "title": f"Article from {parsed.netloc or 'Lumen Source'}",
-                "author": "Lumen Staff",
-                "extracted_text": (
-                    "Artificial intelligence and computational grids are transforming human productivity. "
-                    "In recent weeks, neural reasoning agents have advanced beyond prompt-based inputs. "
-                    "Instead, we are seeing real-time reasoning models which plan and reflect on solutions. "
-                    "Tokyo has also unveiled energy-efficient carbon-neutral grids for computational datacenters. "
-                    "This marks a significant change in global smart grid architectures."
-                ),
-                "category": "Technology"
-            }
+            print(f"[Analyzer Scraper Error] Failed to scrape {url}: {e}")
+            raise Exception(f"Failed to scrape URL: {str(e)}")
 
     def infer_category_simple(self, url: str, title: str, text: str) -> str:
         categories = ["AI", "Science", "Politics", "Startups", "Lifestyle", "Technology"]
@@ -102,6 +90,30 @@ class AnalyzerAgent:
         text = state.get("extracted_text", "")
         title = state.get("title", "")
         
+        # --- Guardrails: Length & Local Profanity Checks ---
+        import re
+        clean_text = text.strip()
+        words = clean_text.split()
+        word_count = len(words)
+        
+        sentences = re.split(r'[.!?]+', clean_text)
+        sentences = [s.strip() for s in sentences if s.strip()]
+        sentence_count = len(sentences)
+        
+        if word_count < 100 or sentence_count < 3:
+            raise Exception(
+                f"Content violates policy: Article too short. Minimum 100 words and 3 sentences required. (Current: {word_count} words, {sentence_count} sentences)"
+            )
+            
+        profanity_patterns = [
+            r"\bshit\b", r"\bfuck\b", r"\bbitch\b", r"\basshole\b", r"\bbastard\b", r"\bcunt\b", 
+            r"\bdick\b", r"\bpussy\b", r"\bslut\b", r"\bwhore\b", r"\bkill yourself\b", r"\bky[s]\b"
+        ]
+        combined_text = (title + " " + text).lower()
+        for pattern in profanity_patterns:
+            if re.search(pattern, combined_text):
+                raise Exception("Content violates policy: Abusive, profane, or inappropriate language detected.")
+        
         print(f"[Agent 1 Analyzer] Performing semantic analysis on: '{title}'")
         
         groq_key = os.getenv("GROQ_API_KEY")
@@ -110,6 +122,31 @@ class AnalyzerAgent:
             
         try:
             client = Groq(api_key=groq_key)
+            
+            # --- Guardrail: Groq LLM Moderation Check ---
+            moderation_prompt = (
+                "Analyze the following article title and body text for policy violations. "
+                "Policy violations include: abusive/offensive language, hate speech, threats of violence, "
+                "harassment, spam, extremely graphic/explicit content, or promotion of illegal acts.\n\n"
+                "Respond with a single JSON object containing 'allowed' (boolean) and 'reason' (string, empty if allowed).\n"
+                "Format: {\"allowed\": true/false, \"reason\": \"reason for rejection\"}\n\n"
+                f"Title: {title}\n"
+                f"Body: {text}"
+            )
+            
+            mod_completion = client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[
+                    {"role": "system", "content": "You are a content moderation assistant. You must output valid JSON only."},
+                    {"role": "user", "content": moderation_prompt}
+                ],
+                temperature=0.0,
+                response_format={"type": "json_object"}
+            )
+            mod_result = json.loads(mod_completion.choices[0].message.content)
+            if not mod_result.get("allowed", True):
+                reason = mod_result.get("reason", "Content violates safety policies.")
+                raise Exception(f"Content violates policy: {reason}")
             prompt = (
                 f"You are the AI Analyzer Agent (Agent 1) in Lumen's premium Multi-Agent publishing system.\n"
                 f"Analyze the following article text and produce a structured analysis report in JSON.\n\n"

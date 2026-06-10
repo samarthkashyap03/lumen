@@ -102,72 +102,6 @@ def is_supabase_configured():
     return SUPABASE_URL != "https://your-supabase-url.supabase.co" and SUPABASE_KEY != "your-supabase-key"
 
 
-def validate_and_moderate_content(title: str, body_text: str):
-    # 1. Length validation: count words and sentences
-    clean_text = body_text.strip()
-    words = clean_text.split()
-    word_count = len(words)
-    
-    sentences = re.split(r'[.!?]+', clean_text)
-    sentences = [s.strip() for s in sentences if s.strip()]
-    sentence_count = len(sentences)
-    
-    if word_count < 100 or sentence_count < 3:
-        raise HTTPException(
-            status_code=400, 
-            detail=f"Content violates policy: Article too short. Minimum 100 words and 3 sentences required. (Current: {word_count} words, {sentence_count} sentences)"
-        )
-    
-    # 2. Local abuse / profanity blocklist moderation
-    profanity_patterns = [
-        r"\bshit\b", r"\bfuck\b", r"\bbitch\b", r"\basshole\b", r"\bbastard\b", r"\bcunt\b", 
-        r"\bdick\b", r"\bpussy\b", r"\bslut\b", r"\bwhore\b", r"\bkill yourself\b", r"\bky[s]\b"
-    ]
-    
-    combined_text = (title + " " + body_text).lower()
-    for pattern in profanity_patterns:
-        if re.search(pattern, combined_text):
-            raise HTTPException(
-                status_code=400,
-                detail="Content violates policy: Abusive, profane, or inappropriate language detected."
-            )
-            
-    # 3. LLM Moderation via Groq if available
-    global groq_client
-    if groq_client:
-        try:
-            moderation_prompt = (
-                "Analyze the following article title and body text for policy violations. "
-                "Policy violations include: abusive/offensive language, hate speech, threats of violence, "
-                "harassment, spam, extremely graphic/explicit content, or promotion of illegal acts.\n\n"
-                "Respond with a single JSON object containing 'allowed' (boolean) and 'reason' (string, empty if allowed).\n"
-                "Format: {\"allowed\": true/false, \"reason\": \"reason for rejection\"}\n\n"
-                f"Title: {title}\n"
-                f"Body: {body_text}"
-            )
-            
-            completion = groq_client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[
-                    {"role": "system", "content": "You are a content moderation assistant. You must output valid JSON only."},
-                    {"role": "user", "content": moderation_prompt}
-                ],
-                temperature=0.0,
-                response_format={"type": "json_object"}
-            )
-            result = json.loads(completion.choices[0].message.content)
-            if not result.get("allowed", True):
-                reason = result.get("reason", "Content violates safety policies.")
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"Content violates policy: {reason}"
-                )
-        except HTTPException:
-            raise
-        except Exception as e:
-            print(f"[Moderation Warning] Groq moderation failed: {e}")
-
-
 # --- Schemas ---
 
 class RegisterRequest(BaseModel):
@@ -396,9 +330,6 @@ async def create_article(req: ArticleCreateRequest):
     if not is_supabase_configured():
         raise HTTPException(status_code=500, detail="Database is not configured")
     
-    # Run publishing guardrails: validation and moderation checks
-    validate_and_moderate_content(req.title, req.body_text)
-    
     article_id = str(uuid.uuid4())
     url = f"lumen://dispatches/{article_id}"
     author = req.author or "Lumen Editors"
@@ -569,9 +500,6 @@ async def update_article(article_id: str, req: ArticleCreateRequest):
     if not is_supabase_configured():
         raise HTTPException(status_code=500, detail="Database is not configured")
         
-    # Run publishing guardrails: validation and moderation checks
-    validate_and_moderate_content(req.title, req.body_text)
-    
     url = f"lumen://dispatches/{article_id}"
     
     try:
