@@ -14,6 +14,7 @@ const links = [
   { to: "/cms", label: "CMS" },
   { to: "/cms/work", label: "My Work" },
   { to: "/analytics", label: "Analytics" },
+  { to: "/admin", label: "Admin" },
 ] as const;
 
 export function Navbar() {
@@ -53,10 +54,13 @@ export function Navbar() {
     navigate({ to: "/login" });
   };
 
-  // Filter links: hide CMS, My Work, and Analytics for non-editors
+  // Filter links: hide CMS, My Work, and Analytics for non-editors/admins, and Admin for non-admins
   const visibleLinks = links.filter((l) => {
     if (l.to === "/cms" || l.to === "/cms/work" || l.to === "/analytics") {
-      return session?.role === "editor";
+      return session?.role === "editor" || session?.role === "admin";
+    }
+    if (l.to === "/admin") {
+      return session?.role === "admin";
     }
     return true;
   });

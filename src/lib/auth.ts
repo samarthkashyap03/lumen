@@ -1,4 +1,4 @@
-export type UserRole = "reader" | "editor";
+export type UserRole = "reader" | "editor" | "admin";
 
 export interface UserSession {
   token: string;
@@ -39,11 +39,17 @@ export const auth = {
 
   isEditor(): boolean {
     const session = this.getSession();
-    return session?.role === "editor";
+    return session?.role === "editor" || session?.role === "admin";
   },
 
   isReader(): boolean {
     const session = this.getSession();
     return session?.role === "reader";
   },
+
+  isAdmin(): boolean {
+    const session = this.getSession();
+    return session?.role === "admin";
+  },
 };
+

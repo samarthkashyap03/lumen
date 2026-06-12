@@ -35,7 +35,8 @@ function Login() {
 
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
+      const endpoint = role === "admin" ? `${API_URL}/api/admin/login` : `${API_URL}/api/auth/login`;
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,7 +54,9 @@ function Login() {
 
       toast.success(`Welcome back, ${data.name}!`);
 
-      if (data.role === "editor") {
+      if (data.role === "admin") {
+        navigate({ to: "/admin" });
+      } else if (data.role === "editor") {
         navigate({ to: "/cms" });
       } else {
         navigate({ to: "/feed" });
@@ -85,11 +88,11 @@ function Login() {
               <Label className="text-[10px] uppercase tracking-[0.25em] text-foreground/60 block">
                 Sign In As
               </Label>
-              <div className="grid grid-cols-2 gap-3 border border-line p-1 rounded bg-ink/50">
+              <div className="grid grid-cols-3 gap-2 border border-line p-1 rounded bg-ink/50">
                 <button
                   type="button"
                   onClick={() => setRole("reader")}
-                  className={`py-2 text-[10px] uppercase tracking-[0.15em] font-medium transition-all ${
+                  className={`py-2 text-[10px] uppercase tracking-[0.12em] font-medium transition-all ${
                     role === "reader"
                       ? "bg-ember text-ink font-semibold"
                       : "text-foreground/60 hover:text-foreground hover:bg-card/20"
@@ -100,13 +103,20 @@ function Login() {
                 <button
                   type="button"
                   onClick={() => setRole("editor")}
-                  className={`py-2 text-[10px] uppercase tracking-[0.15em] font-medium transition-all ${
+                  className={`py-2 text-[10px] uppercase tracking-[0.12em] font-medium transition-all ${
                     role === "editor"
                       ? "bg-ember text-ink font-semibold"
                       : "text-foreground/60 hover:text-foreground hover:bg-card/20"
                   }`}
                 >
                   Editor
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate({ to: "/admin" })}
+                  className="py-2 text-[10px] uppercase tracking-[0.12em] font-medium transition-all text-foreground/60 hover:text-foreground hover:bg-card/20"
+                >
+                  Admin
                 </button>
               </div>
             </div>

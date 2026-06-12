@@ -147,6 +147,14 @@ class EventRequest(BaseModel):
     event_type: str
     metadata: Optional[dict] = None
 
+class AdminLoginRequest(BaseModel):
+    email: str
+    password: str
+
+class ChangeRoleRequest(BaseModel):
+    role: str
+
+
 
 # --- Authentication Endpoints ---
 
@@ -826,6 +834,130 @@ async def get_analytics_summary():
         "swipe_rate_by_day": swipe_rate_by_day,
         "category_distribution": category_distribution,
     }
+
+
+# --- Admin Endpoints ---
+
+@app.post("/api/admin/login")
+async def admin_login(req: AdminLoginRequest):
+    if req.email == "admin@lumenbrief.com" and req.password == "admin_samarth@lumenbrief":
+        return {
+            "user_id": "admin-id-placeholder",
+            "email": req.email,
+            "name": "Samarth Kashyap (Admin)",
+            "role": "admin",
+            "session_token": "admin-session-token-secret-12345"
+        }
+    raise HTTPException(status_code=400, detail="Invalid admin credentials.")
+
+@app.get("/api/admin/users")
+async def admin_get_users(token: str):
+    if token != "admin-session-token-secret-12345":
+        raise HTTPException(status_code=401, detail="Unauthorized admin access.")
+    if not is_supabase_configured():
+        raise HTTPException(status_code=500, detail="Database is not configured")
+    try:
+        auth_users = []
+        try:
+            res = supabase.auth.admin.list_users()
+            if hasattr(res, 'users'):
+                auth_users = res.users
+            elif isinstance(res, list):
+                auth_users = res
+            elif isinstance(res, dict) and 'users' in res:
+                auth_users = res['users']
+            else:
+                auth_users = getattr(res, 'data', [])
+        except Exception as ae:
+            print(f"Error fetching auth users: {ae}")
+            
+        profiles_res = supabase.table("profiles").select("*").execute()
+        profiles_map = {p["id"]: p for p in (profiles_res.data or [])}
+        
+        combined_users = []
+        for u in auth_users:
+            u_id = getattr(u, 'id', None) or (u.get('id') if isinstance(u, dict) else None)
+            u_email = getattr(u, 'email', None) or (u.get('email') if isinstance(u, dict) else None)
+            u_created_at = getattr(u, 'created_at', None) or (u.get('created_at') if isinstance(u, dict) else None)
+            
+            if not u_id:
+                continue
+                
+            profile = profiles_map.get(u_id, {})
+            combined_users.append({
+                "id": u_id,
+                "email": u_email or "N/A",
+                "name": profile.get("name") or (u_email.split("@")[0] if u_email else "Unknown User"),
+                "role": profile.get("role") or "reader",
+                "created_at": u_created_at or profile.get("created_at")
+            })
+            
+        auth_user_ids = {u["id"] for u in combined_users}
+        for p_id, p in profiles_map.items():
+            if p_id not in auth_user_ids:
+                combined_users.append({
+                    "id": p_id,
+                    "email": "local-mock-user@lumen.app",
+                    "name": p.get("name") or "Local Mock",
+                    "role": p.get("role") or "reader",
+                    "created_at": p.get("created_at")
+                })
+                
+        return combined_users
+    except Exception as e:
+        print(f"Admin list users failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/api/admin/users/{user_id}")
+async def admin_delete_user(user_id: str, token: str):
+    if token != "admin-session-token-secret-12345":
+        raise HTTPException(status_code=401, detail="Unauthorized admin access.")
+    if not is_supabase_configured():
+        raise HTTPException(status_code=500, detail="Database is not configured")
+    try:
+        try:
+            supabase.auth.admin.delete_user(user_id)
+        except Exception as ae:
+            print(f"Could not delete from auth: {ae}")
+            
+        supabase.table("profiles").delete().eq("id", user_id).execute()
+        return {"status": "success", "message": "User deleted successfully."}
+    except Exception as e:
+        print(f"Admin delete user failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.put("/api/admin/users/{user_id}/role")
+async def admin_change_user_role(user_id: str, req: ChangeRoleRequest, token: str):
+    if token != "admin-session-token-secret-12345":
+        raise HTTPException(status_code=401, detail="Unauthorized admin access.")
+    if not is_supabase_configured():
+        raise HTTPException(status_code=500, detail="Database is not configured")
+    try:
+        supabase.table("profiles").update({"role": req.role}).eq("id", user_id).execute()
+        try:
+            supabase.auth.admin.update_user_by_id(user_id, {
+                "user_metadata": {"role": req.role}
+            })
+        except Exception as ae:
+            print(f"Could not update auth metadata: {ae}")
+            
+        return {"status": "success", "message": f"User role updated to {req.role}."}
+    except Exception as e:
+        print(f"Admin change role failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/admin/articles")
+async def admin_get_articles(token: str):
+    if token != "admin-session-token-secret-12345":
+        raise HTTPException(status_code=401, detail="Unauthorized admin access.")
+    if not is_supabase_configured():
+        raise HTTPException(status_code=500, detail="Database is not configured")
+    try:
+        res = supabase.table("articles").select("*").order("created_at", desc=True).execute()
+        return res.data
+    except Exception as e:
+        print(f"Admin fetch articles failed: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch articles.")
 
 
 if __name__ == "__main__":

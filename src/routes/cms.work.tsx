@@ -62,8 +62,8 @@ function CmsWorkPage() {
     setMounted(true);
     const s = auth.getSession();
     setSession(s);
-    if (!s || s.role !== "editor") {
-      toast.error("Access restricted to Editors.");
+    if (!s || (s.role !== "editor" && s.role !== "admin")) {
+      toast.error("Access restricted to Editors and Admins.");
       navigate({ to: "/login" });
     }
   }, []);
@@ -182,7 +182,7 @@ function CmsWorkPage() {
     groups[header].push(art);
   });
 
-  if (!mounted || !session || session.role !== "editor") {
+  if (!mounted || !session || (session.role !== "editor" && session.role !== "admin")) {
     return null;
   }
 

@@ -74,14 +74,14 @@ function AnalyticsPage() {
     setMounted(true);
     const s = auth.getSession();
     setSession(s);
-    if (!s || s.role !== "editor") {
-      toast.error("Access restricted to Editors.");
+    if (!s || (s.role !== "editor" && s.role !== "admin")) {
+      toast.error("Access restricted to Editors and Admins.");
       navigate({ to: "/login" });
     }
   }, []);
 
   useEffect(() => {
-    if (mounted && session && session.role === "editor") {
+    if (mounted && session && (session.role === "editor" || session.role === "admin")) {
       fetch(`${API_URL}/api/analytics/summary`)
         .then((res) => {
           if (!res.ok) throw new Error();
@@ -97,7 +97,7 @@ function AnalyticsPage() {
     }
   }, [mounted, session]);
 
-  if (!mounted || !session || session.role !== "editor") {
+  if (!mounted || !session || (session.role !== "editor" && session.role !== "admin")) {
     return null;
   }
 
