@@ -154,6 +154,10 @@ class AdminLoginRequest(BaseModel):
 class ChangeRoleRequest(BaseModel):
     role: str
 
+class PinArticleRequest(BaseModel):
+    pinned: bool
+
+
 
 
 # --- Authentication Endpoints ---
@@ -239,7 +243,7 @@ async def auth_login(req: LoginRequest):
         raise HTTPException(status_code=400, detail="Invalid credentials or login failed.")
 
 @app.get("/api/auth/session")
-async def auth_session(token: str):
+async def auth_session(token: str, role: Optional[str] = None):
     if not is_supabase_configured():
         raise HTTPException(status_code=500, detail="Database is not configured")
     try:
@@ -247,31 +251,61 @@ async def auth_session(token: str):
         res = supabase.auth.get_user(token)
         if res.user:
             profile_res = supabase.table("profiles").select("*").eq("id", res.user.id).execute()
-            role = "reader"
+            user_role = role or "reader"
             name = res.user.email.split("@")[0]
+            
+            # Security Check: Only allow pre-approved emails to get the admin role
+            allowed_admins = [
+                "admin@lumenbrief.com", 
+                "samarthkashyap.de@gmail.com", 
+                "samarthkashyap.12345@gmail.com"
+            ]
+            if user_role == "admin" and res.user.email not in allowed_admins:
+                user_role = "reader" # Force demote unauthorized admin request
+                
             if not profile_res.data:
                 try:
                     supabase.table("profiles").insert({
                         "id": res.user.id,
                         "name": name,
-                        "role": role
+                        "role": user_role
                     }).execute()
                     print(f"[Auto-heal] Created missing profile in Supabase on session validation for user {res.user.id}")
                 except Exception as pe:
                     print(f"[Auto-heal Warning] Failed to create missing profile: {pe}")
             else:
-                role = profile_res.data[0].get("role", "reader")
+                current_role = profile_res.data[0].get("role", "reader")
                 name = profile_res.data[0].get("name", name)
+                
+                # If they select a role in UI (e.g. editor) and it's different, update it
+                # but enforce the admin email check
+                if role and role != current_role:
+                    new_role = role
+                    if new_role == "admin" and res.user.email not in allowed_admins:
+                        new_role = current_role # Reject upgrade if email is unauthorized
+                        
+                    if new_role != current_role:
+                        try:
+                            supabase.table("profiles").update({"role": new_role}).eq("id", res.user.id).execute()
+                            user_role = new_role
+                        except Exception as pe:
+                            print(f"Failed to update profile role: {pe}")
+                    else:
+                        user_role = current_role
+                else:
+                    user_role = current_role
             
             return {
                 "user_id": res.user.id,
                 "name": name,
-                "role": role
+                "role": user_role
             }
     except Exception as e:
         print(f"Supabase session retrieval failed: {e}")
         
     raise HTTPException(status_code=401, detail="Invalid session token.")
+
+
 
 
 @app.post("/api/auth/forgot-password")
@@ -312,14 +346,17 @@ async def auth_reset_password(req: ResetPasswordRequest):
 
 
 @app.get("/api/auth/login/google")
-def auth_login_google(redirect_to: Optional[str] = None):
+def auth_login_google(role: Optional[str] = "reader", redirect_to: Optional[str] = None):
     if not is_supabase_configured():
         raise HTTPException(status_code=500, detail="Database is not configured")
     from fastapi.responses import RedirectResponse
     frontend_url = redirect_to or os.getenv("FRONTEND_URL", "http://localhost:5173")
-    callback_url = f"{frontend_url.rstrip('/')}/oauth-callback"
-    oauth_url = f"{SUPABASE_URL.rstrip('/')}/auth/v1/authorize?provider=google&redirect_to={callback_url}"
+    import urllib.parse
+    callback_url = f"{frontend_url.rstrip('/')}/oauth-callback?role={role}"
+    encoded_callback = urllib.parse.quote(callback_url)
+    oauth_url = f"{SUPABASE_URL.rstrip('/')}/auth/v1/authorize?provider=google&redirect_to={encoded_callback}"
     return RedirectResponse(oauth_url)
+
 
 
 # --- CMS & Article Endpoints ---
@@ -401,17 +438,28 @@ async def ingest_url(request: IngestRequest):
         print(f"Supabase URL check failed: {e}")
         raise HTTPException(status_code=500, detail="Failed to queue ingestion")
 
-# Fetch submissions for specific editor
 @app.get("/api/cms/my-articles")
 async def get_my_articles(editor_id: str):
     if not is_supabase_configured():
         raise HTTPException(status_code=500, detail="Database is not configured")
     try:
-        res = supabase.table("articles").select("*").eq("editor_id", editor_id).order("created_at", desc=True).execute()
+        role = "editor"
+        try:
+            profile_res = supabase.table("profiles").select("role").eq("id", editor_id).execute()
+            if profile_res.data:
+                role = profile_res.data[0].get("role", "editor")
+        except Exception:
+            pass
+
+        if role == "admin" or editor_id == "admin-id-placeholder":
+            res = supabase.table("articles").select("*").order("created_at", desc=True).execute()
+        else:
+            res = supabase.table("articles").select("*").eq("editor_id", editor_id).order("created_at", desc=True).execute()
         return res.data
     except Exception as e:
         print(f"Failed to fetch my-articles: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch articles.")
+
 
 # Get Ingestion Status/Queue List
 @app.get("/api/cms/queue")

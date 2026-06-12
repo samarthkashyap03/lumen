@@ -29,10 +29,13 @@ function OAuthCallback() {
       return;
     }
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const role = urlParams.get("role") || "reader";
+
     // Call backend to validate the session and fetch role info
     const validateSession = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/auth/session?token=${accessToken}`);
+        const response = await fetch(`${API_URL}/api/auth/session?token=${accessToken}&role=${role}`);
         if (!response.ok) {
           throw new Error("Failed to retrieve session info.");
         }
@@ -43,7 +46,9 @@ function OAuthCallback() {
         auth.setSession(accessToken, data.user_id, data.name, data.role);
         toast.success(`Welcome back, ${data.name}!`);
 
-        if (data.role === "editor") {
+        if (data.role === "admin") {
+          navigate({ to: "/admin" });
+        } else if (data.role === "editor") {
           navigate({ to: "/cms" });
         } else {
           navigate({ to: "/feed" });

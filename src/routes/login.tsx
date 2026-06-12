@@ -195,7 +195,7 @@ function Login() {
               <button
                 type="button"
                 onClick={() => {
-                  window.location.href = `${API_URL}/api/auth/login/google?redirect_to=${window.location.origin}`;
+                  window.location.href = `${API_URL}/api/auth/login/google?redirect_to=${window.location.origin}&role=${role}`;
                 }}
                 className="w-full px-8 py-4 border border-line text-foreground hover:bg-card/45 text-xs tracking-[0.2em] uppercase font-semibold flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer"
               >
