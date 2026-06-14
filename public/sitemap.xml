@@ -50,7 +50,7 @@
 
   <!-- Register Page -->
   <url>
-    <loc>https://lumen-online.vercel.app/register</loc>
+    <loc>https://lumenbrief.app/register</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
