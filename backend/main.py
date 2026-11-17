@@ -21,8 +21,8 @@ if os.path.exists(env_path):
                 key, val = line.split("=", 1)
                 os.environ[key.strip()] = val.strip().strip('"').strip("'")
 
-SUPABASE_URL = os.getenv("SUPABASE_URL", "https://your-supabase-url.supabase.co")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY", os.getenv("SUPABASE_KEY", "your-supabase-key"))
+SUPABASE_URL = os.getenv("SUPABASE_URL") or "https://your-supabase-url.supabase.co"
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_KEY") or "your-supabase-key"
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 
