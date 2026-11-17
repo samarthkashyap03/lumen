@@ -1,5 +1,3 @@
-from sentence_transformers import SentenceTransformer
-
 class EmbeddingAgent:
     """
     Agent 6: Vectorizes the article chunks locally using
@@ -19,7 +17,7 @@ class EmbeddingAgent:
             
         try:
             if self.model is None:
-                # Lazy-load model to conserve memory when agent is instantiated but not run
+                from sentence_transformers import SentenceTransformer
                 self.model = SentenceTransformer('all-MiniLM-L6-v2')
                 
             embeddings = self.model.encode(chunks)
